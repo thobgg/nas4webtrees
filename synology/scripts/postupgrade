@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/common"
+log "postupgrade"
+save_wizard
+apply_ports "$(wiz_get wizard_port)"
+exit 0

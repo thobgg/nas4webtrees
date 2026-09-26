@@ -1,0 +1,12 @@
+#!/bin/sh
+. "$(dirname "$0")/common"
+log "postinst (Version ${SYNOPKG_PKGVER})"
+mkdir -p "${VAR}"
+save_wizard
+apply_ports "$(wiz_get wizard_port)"
+if [ "${SYNOPKG_PKG_STATUS}" = "INSTALL" ]; then
+    write_setup
+    log "Einrichtungsdaten geschrieben; der Container liest sie beim ersten Start und löscht das Passwort"
+fi
+log "postinst fertig — Image und Container übernimmt der Container Manager"
+exit 0

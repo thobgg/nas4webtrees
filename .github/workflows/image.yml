@@ -1,0 +1,64 @@
+name: image
+
+# Baut ghcr.io/thobgg/nas4webtrees für amd64, arm64 und armv7.
+# - bei jedem Push auf main (Tags <WEBTREES>-<REVISION>, <WEBTREES>, latest)
+# - wöchentlich neu, damit Sicherheitsupdates von PHP, Apache und Debian ankommen
+# - bei Pull Requests nur bauen, nicht veröffentlichen
+on:
+  push:
+    branches: [main]
+    paths: [image/**, VERSIONS, .github/workflows/image.yml]
+  pull_request:
+    paths: [image/**, VERSIONS, .github/workflows/image.yml]
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versionen lesen
+        id: v
+        run: |
+          get() { sed -n "s/^$1=//p" VERSIONS | tr -d '[:space:]'; }
+          {
+            echo "webtrees=$(get WEBTREES)"
+            echo "webtrees_sha=$(get WEBTREES_SHA256)"
+            echo "api=$(get API4WEBTREES)"
+            echo "api_sha=$(get API4WEBTREES_SHA256)"
+            echo "tag=$(get WEBTREES)-$(get REVISION)"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: image
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: ${{ github.event_name != 'pull_request' }}
+          build-args: |
+            WEBTREES_VERSION=${{ steps.v.outputs.webtrees }}
+            WEBTREES_SHA256=${{ steps.v.outputs.webtrees_sha }}
+            API4WEBTREES_VERSION=${{ steps.v.outputs.api }}
+            API4WEBTREES_SHA256=${{ steps.v.outputs.api_sha }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/nas4webtrees:${{ steps.v.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/nas4webtrees:${{ steps.v.outputs.webtrees }}
+            ghcr.io/${{ github.repository_owner }}/nas4webtrees:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

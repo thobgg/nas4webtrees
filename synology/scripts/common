@@ -1,0 +1,143 @@
+#!/bin/sh
+# Gemeinsame Helfer. Das Paket läuft OHNE root (unsignierte Pakete dürfen das nicht): Image
+# und Container baut, startet und stoppt der Docker-Worker des Container Managers
+# (conf/resource). Hier bleiben Assistenten-Auswertung, die Einrichtungsdatei für den
+# Container, der Mount für die Sicherung und die Statusabfrage.
+PKG="nas4webtrees"
+PKG_ROOT="/var/packages/${PKG}"
+TARGET="${SYNOPKG_PKGDEST:-${PKG_ROOT}/target}"
+VAR="${SYNOPKG_PKGVAR:-${PKG_ROOT}/var}"
+WIZENV="${VAR}/wizard.env"
+LOG="${VAR}/install.log"
+VOL_BASE="${WTSPK_VOL_BASE:-${SYNOPKG_PKGDEST_VOL:-/volume1}}"
+# Ordner des Docker-Workers: /volume1/docker/nas4webtrees/data (im Container /webtrees: Programm und
+# Daten). Den entfernt der Worker beim Deinstallieren — deshalb die Sicherung außerhalb.
+DOCKER_DIR="${VOL_BASE}/docker/${PKG}"
+BACKUP_SUBDIR="webtrees-sicherung"
+CONTAINER="syno-nas4webtrees"
+DOCKER_INSPECT="/usr/local/bin/docker_inspect"
+DEFAULT_LAN_PORT="8095"
+
+log() {
+    msg="$(date '+%Y-%m-%d %H:%M:%S') [$(basename "$0") ${SYNOPKG_PKG_STATUS:-}] $*"
+    mkdir -p "${VAR}" 2>/dev/null
+    echo "${msg}" >> "${LOG}" 2>/dev/null
+    echo "${msg}"
+}
+die() {
+    log "FEHLER: $*"
+    [ -n "${SYNOPKG_TEMP_LOGFILE:-}" ] && echo "$*" >> "${SYNOPKG_TEMP_LOGFILE}"
+    exit 1
+}
+wiz_get() { [ -f "${WIZENV}" ] && sed -n "s/^$1=//p" "${WIZENV}" | head -1; }
+json_escape() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
+port_valid() { case "$1" in ''|*[!0-9]*) return 1;; esac; [ "$1" -ge 1024 ] && [ "$1" -le 65535 ]; }
+# Belegte TCP-Ports ohne ss/netstat: /proc/net/tcp{,6}, Zustand 0A = LISTEN, Port hex.
+port_in_use() {
+    hexport="$(printf '%04X' "$1")"
+    cat /proc/net/tcp /proc/net/tcp6 2>/dev/null | awk -v p=":${hexport}" '$4 == "0A" && index($2, p) == length($2) - length(p) + 1 { found = 1 } END { exit found ? 0 : 1 }'
+}
+
+# Liegt am Zielort schon eine webtrees-Datenbank (Neuinstallation über erhaltenen Daten)?
+# Der Paketnutzer kann dort wegen der Synology-ACLs evtl. nicht hineinsehen; dann gilt
+# „nein“, und der Assistent verlangt ein Passwort — das der Container dann nicht braucht.
+has_live_data() { [ -e "${DOCKER_DIR}/data/data/webtrees.sqlite" ]; }
+has_backup() {
+    ls "${VOL_BASE}/$1/${BACKUP_SUBDIR}/database/"webtrees_*.sqlite >/dev/null 2>&1
+}
+
+# Assistenten-Werte dauerhaft merken (für Update-Assistent und prestart). Keine Passwörter.
+save_wizard() {
+    mkdir -p "${VAR}"; umask 077
+    {
+        echo "wizard_port=${wizard_port:-$(wiz_get wizard_port)}"
+        echo "wizard_backup_share=${wizard_backup_share:-$(wiz_get wizard_backup_share)}"
+        echo "pkg_version=${SYNOPKG_PKGVER}"
+    } > "${WIZENV}.tmp" && mv "${WIZENV}.tmp" "${WIZENV}"
+    umask 022
+}
+
+# Einrichtungsdaten für den Container (target/conf = /config). Das Passwort steht nur bis zum
+# ersten Start darin; das Image richtet webtrees damit ein und löscht es dann aus der Datei.
+write_setup() {
+    out="${TARGET}/conf/setup.json"
+    lang="de"; [ "${SYNOPKG_DSM_LANGUAGE:-ger}" = "ger" ] || lang="en-US"
+    restore="true"; [ "${wizard_restore:-true}" = "true" ] || restore="false"
+    mkdir -p "${TARGET}/conf"; umask 077
+    printf '{"user":"%s","name":"%s","email":"%s","password":"%s","lang":"%s","tree":"stammbaum","tree_title":"%s","restore":%s}\n' \
+        "$(json_escape "${wizard_admin_user}")" "$(json_escape "${wizard_admin_name:-${wizard_admin_user}}")" \
+        "$(json_escape "${wizard_admin_email}")" "$(json_escape "${wizard_admin_pw:-}")" "${lang}" \
+        "$(json_escape "${wizard_tree_title:-Mein Stammbaum}")" "${restore}" > "${out}"
+    umask 022
+}
+
+# Port in die statischen Paketdateien (Firewall-Dienst, DSM-Menüeintrag).
+apply_ports() {
+    lan="${1:-${DEFAULT_LAN_PORT}}"
+    [ -f "${TARGET}/port_conf/nas4webtrees.sc.tmpl" ] && sed "s/__LAN_PORT__/${lan}/g" \
+        "${TARGET}/port_conf/nas4webtrees.sc.tmpl" > "${TARGET}/port_conf/nas4webtrees.sc"
+    [ -f "${TARGET}/templates/ui-config.tmpl" ] && sed "s/__LAN_PORT__/${lan}/g" \
+        "${TARGET}/templates/ui-config.tmpl" > "${TARGET}/ui/config"
+    return 0
+}
+
+# Zeitzone der NAS als IANA-Name. Ohne sie läuft der Container
+# in UTC, und die nächtliche Sicherung verschiebt sich.
+detect_timezone() {
+    zone=""
+    if [ -L /etc/localtime ]; then
+        zone="$(readlink /etc/localtime 2>/dev/null)"
+        case "${zone}" in
+            */zoneinfo/*) zone="${zone#*/zoneinfo/}" ;;
+            *)            zone="" ;;
+        esac
+    fi
+    if [ -z "${zone}" ] && [ -r /etc/TZ ]; then
+        zone="$(head -1 /etc/TZ 2>/dev/null | tr -d ' \t\r\n')"
+    fi
+    printf '%s' "${zone}"
+}
+
+# Mount für die Sicherung: target/mounts/backup → /volume1/<Freigabe>. Erst im prestart — der
+# Install-Worker prüft Pfade und lehnt Symlinks nach außen ab; Docker folgt ihnen beim
+# Einhängen. Nie auf ein fehlendes Ziel verlinken, sonst startet der Container nicht.
+apply_mounts() {
+    share="$1"
+    mkdir -p "${TARGET}/mounts" "${TARGET}/empty"
+    m="${TARGET}/mounts/backup"
+    if [ -d "${m}" ] && [ ! -L "${m}" ]; then
+        rm -f "${m}/.keep" 2>/dev/null
+        rmdir "${m}" 2>/dev/null || log "WARNUNG: ${m} lässt sich nicht ersetzen"
+    fi
+    if [ -n "${share}" ] && [ -d "${VOL_BASE}/${share}" ]; then
+        ln -sfn "${VOL_BASE}/${share}" "${m}"
+        log "Sicherung nach ${VOL_BASE}/${share}/${BACKUP_SUBDIR}"
+    else
+        ln -sfn ../empty "${m}"
+        log "WARNUNG: Freigabe ${VOL_BASE}/${share} nicht gefunden — keine Sicherung"
+    fi
+
+    # Gruppe, die laut Rechteliste der Freigabe docker schreiben darf. Der Container läuft sonst
+    # als www-data und fällt unter „everyone: nur lesen“ (Befund Virtual DSM, 26.09.2026).
+    gid="$(awk -F: '$1 == "administrators" { print $3 }' /etc/group 2>/dev/null)"
+    if [ -n "${gid}" ]; then
+        printf '%s' "${gid}" > "${TARGET}/conf/write-gid"
+    else
+        rm -f "${TARGET}/conf/write-gid"
+    fi
+
+    tz="$(detect_timezone)"
+    if [ -n "${tz}" ]; then
+        printf '%s' "${tz}" > "${TARGET}/conf/timezone"
+    else
+        rm -f "${TARGET}/conf/timezone"
+        log "WARNUNG: Zeitzone der NAS nicht ermittelbar — der Container läuft in UTC"
+    fi
+}
+
+container_running() {
+    [ -x "${DOCKER_INSPECT}" ] || return 4
+    "${DOCKER_INSPECT}" "${CONTAINER}" 2>/dev/null | grep -q '"Running": true' && return 0
+    "${DOCKER_INSPECT}" "${CONTAINER}" 2>/dev/null | grep -q '"Status"' && return 3
+    return 4
+}

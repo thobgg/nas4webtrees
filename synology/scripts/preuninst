@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/common"
+log "preuninst"
+exit 0

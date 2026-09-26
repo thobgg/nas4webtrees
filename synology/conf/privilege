@@ -1,0 +1,5 @@
+{
+  "defaults": { "run-as": "package" },
+  "username": "nas4webtrees",
+  "groupname": "nas4webtrees"
+}

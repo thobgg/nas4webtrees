@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Paket-Icon: Stammbaum aus Knoten und Linien. Eigenes Motiv, nicht das webtrees-Logo. -->
+  <g stroke="#1F5F99" stroke-width="12" stroke-linecap="round" fill="none">
+    <path d="M128 200 V150 M128 150 H68 V112 M128 150 H188 V112 M68 112 H40 V76 M68 112 H96 V76 M188 112 H160 V76 M188 112 H216 V76"/>
+  </g>
+  <g fill="#1F5F99">
+    <circle cx="128" cy="210" r="24"/>
+  </g>
+  <g fill="#3E8E41">
+    <circle cx="40" cy="58" r="20"/><circle cx="96" cy="58" r="20"/>
+    <circle cx="160" cy="58" r="20"/><circle cx="216" cy="58" r="20"/>
+  </g>
+</svg>

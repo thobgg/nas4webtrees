@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/common"
+log "preupgrade von ${SYNOPKG_OLD_PKGVER} auf ${SYNOPKG_PKGVER} — Programm und Daten unter ${DOCKER_DIR} bleiben (Worker)"
+exit 0

@@ -1,0 +1,49 @@
+{
+  "docker": {
+    "services": [
+      {
+        "service": "nas4webtrees",
+        "image": "nas4webtrees-spk",
+        "tag": "{{PKG_VERSION}}",
+        "container_name": "syno-nas4webtrees",
+        "environment": [
+          {
+            "env_var": "BACKUP_SUBDIR",
+            "env_value": "webtrees-sicherung"
+          },
+          {
+            "env_var": "NAS4WEBTREES_PKG",
+            "env_value": "synology-{{PKG_VERSION}}"
+          }
+        ],
+        "volumes": [
+          {
+            "host_dir": "conf",
+            "mount_point": "/config"
+          },
+          {
+            "host_dir": "mounts/backup",
+            "mount_point": "/backup"
+          }
+        ],
+        "shares": [
+          {
+            "host_dir": "data",
+            "mount_point": "/webtrees"
+          }
+        ],
+        "ports": [
+          {
+            "host_port": "{{wizard_port}}",
+            "container_port": "80",
+            "protocol": "tcp"
+          }
+        ],
+        "build": "image"
+      }
+    ]
+  },
+  "port-config": {
+    "protocol-file": "port_conf/nas4webtrees.sc"
+  }
+}

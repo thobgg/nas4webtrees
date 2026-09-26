@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/common"
+log "postuninst — Container, Image und ${DOCKER_DIR} entfernt der Worker; die Sicherung unter /<Freigabe>/${BACKUP_SUBDIR} bleibt"
+exit 0

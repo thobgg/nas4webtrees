@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>nas4webtrees</Name>
+  <Repository>ghcr.io/thobgg/nas4webtrees:latest</Repository>
+  <Registry>https://github.com/thobgg/nas4webtrees/pkgs/container/nas4webtrees</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/thobgg/nas4webtrees/issues</Support>
+  <Project>https://github.com/thobgg/nas4webtrees</Project>
+  <Overview>The original, unmodified webtrees (online genealogy) with SQLite — no database server needed. Includes api4webtrees so the wtAnd (Android), wtWin (Windows) and wtTux (Linux) apps connect right away. Nightly backup of every family tree as a GEDCOM file, plus database and media. webtrees updates itself via its own control panel.</Overview>
+  <Category>Productivity: Other:</Category>
+  <WebUI>http://[IP]:[PORT:80]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/thobgg/nas4webtrees/main/unraid/nas4webtrees.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/thobgg/nas4webtrees/main/docs/icon-256.png</Icon>
+  <Config Name="Web UI port" Target="80" Default="8095" Mode="tcp" Description="Port for the web interface" Type="Port" Display="always" Required="true" Mask="false">8095</Config>
+  <Config Name="webtrees" Target="/webtrees" Default="/mnt/user/appdata/nas4webtrees/webtrees" Mode="rw" Description="Program and data" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nas4webtrees/webtrees</Config>
+  <Config Name="Backup" Target="/backup" Default="/mnt/user/appdata/nas4webtrees/backup" Mode="rw" Description="Nightly backup (GEDCOM, database, media) and import folder" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/nas4webtrees/backup</Config>
+  <Config Name="PUID" Target="PUID" Default="99" Description="User ID for files" Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="100" Description="Group ID for files" Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
+  <Config Name="Time zone" Target="TZ" Default="Europe/Berlin" Description="IANA time zone, e.g. Europe/Berlin" Type="Variable" Display="always" Required="false" Mask="false">Europe/Berlin</Config>
+  <Config Name="Admin user" Target="WT_USER" Default="" Description="Optional: create this administrator on first start. Leave empty to use the webtrees setup wizard in the browser." Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="Admin email" Target="WT_EMAIL" Default="" Description="Optional, with Admin user" Type="Variable" Display="always" Required="false" Mask="false"/>
+  <Config Name="Admin password" Target="WT_PASS" Default="" Description="Optional, with Admin user; only used on first start" Type="Variable" Display="always" Required="false" Mask="true"/>
+  <Config Name="Language" Target="WT_LANG" Default="en-US" Description="Language for setup, e.g. de, en-US, nl, fr" Type="Variable" Display="advanced" Required="false" Mask="false">en-US</Config>
+</Container>

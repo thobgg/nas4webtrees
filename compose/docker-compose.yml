@@ -1,0 +1,37 @@
+# nas4webtrees — das originale webtrees mit api4webtrees für wtAnd, wtWin und wtTux.
+# Für TrueNAS SCALE, UGREEN, TerraMaster, Asustor (Portainer), Unraid (Compose), QNAP
+# (Container Station), Raspberry Pi und jeden Linux-Server mit Docker.
+#
+# Anpassen: die beiden Pfade links vom Doppelpunkt, den Port und die Angaben unter environment.
+# Ohne WT_USER/WT_EMAIL/WT_PASS zeigt webtrees beim ersten Aufruf seinen eigenen
+# Einrichtungsassistenten — dort „SQLite“ wählen, dann braucht es keinen Datenbank-Server.
+services:
+  webtrees:
+    image: ghcr.io/thobgg/nas4webtrees:latest
+    container_name: webtrees
+    restart: unless-stopped
+    ports:
+      - "8095:80"
+    volumes:
+      - ./webtrees:/webtrees        # Programm und Daten; webtrees aktualisiert sich hier selbst
+      - ./backup:/backup            # nächtliche Sicherung: GEDCOM, Datenbank, Fotos; import/
+    environment:
+      TZ: Europe/Berlin
+      WT_LANG: de
+      WT_TREE_TITLE: Mein Stammbaum
+      # Automatische Einrichtung beim ersten Start (danach ohne Wirkung):
+      WT_USER: admin
+      WT_NAME: Mein Name
+      WT_EMAIL: ich@example.org
+      WT_PASS_FILE: /run/secrets/webtrees_admin
+      # Auf Unraid u. ä.: Besitzer der Dateien
+      # PUID: "99"
+      # PGID: "100"
+    secrets:
+      - webtrees_admin
+
+# Das erste Admin-Passwort als Datei statt als Umgebungsvariable — die bliebe sonst dauerhaft
+# in der Container-Konfiguration lesbar. Datei anlegen, eine Zeile, danach darf sie weg.
+secrets:
+  webtrees_admin:
+    file: ./webtrees_admin_password.txt

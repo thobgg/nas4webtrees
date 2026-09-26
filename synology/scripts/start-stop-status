@@ -1,0 +1,14 @@
+#!/bin/sh
+# Starten und Stoppen erledigt der Docker-Worker des Container Managers (conf/resource).
+. "$(dirname "$0")/common"
+case "$1" in
+    # prestart läuft vor dem Start-Worker: erst hier darf der Mount-Symlink aus dem Paket
+    # hinauszeigen — der Install-Worker prüft Pfade und lehnt Symlinks ab.
+    prestart) apply_mounts "$(wiz_get wizard_backup_share)"; exit 0 ;;
+    prestop)  exit 0 ;;
+    start)    log "start (Worker)"; exit 0 ;;
+    stop)     log "stop (Worker)";  exit 0 ;;
+    status)   container_running; exit $? ;;
+    log)      echo "${LOG}"; exit 0 ;;
+    *)        exit 1 ;;
+esac
