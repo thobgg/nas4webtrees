@@ -36,6 +36,7 @@ T_RESTORE="Aus vorhandener Sicherung wiederherstellen"
 T_RESTORE_HINT="Nur wirksam, wenn dort schon eine Sicherung liegt — etwa nach einer Neuinstallation."
 T_P3="Vor dem Start"
 T_IMPORT="<b>Vorhandenen Stammbaum übernehmen?</b> Nach der Installation die GEDCOM-Datei in den Ordner <code>webtrees-sicherung/import</code> legen und das Paket einmal stoppen und starten. Oder in webtrees: Verwaltung → Stammbäume → GEDCOM-Datei importieren."
+T_APPS="<b>Apps:</b> Nach dem Anmelden in webtrees im Menü <b>App</b> — dort gibt es wtAnd fürs Handy (QR-Code) und die Adresse für wtWin und wtTux am PC."
 T_WAIT="<b>Die Installation dauert einige Minuten.</b> Beim ersten Mal lädt der Container Manager einige hundert MB; der Fortschrittsbalken bewegt sich dabei kaum."
 T_UPD="Programm und Daten bleiben erhalten. webtrees selbst aktualisierst du wie gewohnt in webtrees unter Verwaltung → Aktualisierung; dieses Paket-Update erneuert nur die Umgebung (Apache, PHP) und api4webtrees und setzt webtrees nie auf eine ältere Fassung zurück."
 else
@@ -61,6 +62,7 @@ T_RESTORE="Restore from an existing backup"
 T_RESTORE_HINT="Only takes effect if a backup is already there — e.g. after reinstalling."
 T_P3="Before you start"
 T_IMPORT="<b>Bringing an existing tree?</b> After installation, put the GEDCOM file into the folder <code>webtrees-sicherung/import</code> and stop and start the package once. Or in webtrees: Control panel → Family trees → Import a GEDCOM file."
+T_APPS="<b>Apps:</b> After signing in to webtrees, open the menu <b>App</b> — it offers wtAnd for your phone (QR code) and the address for wtWin and wtTux on your PC."
 T_WAIT="<b>Installation takes a few minutes.</b> The first time, Container Manager downloads a few hundred MB; the progress bar barely moves meanwhile."
 T_UPD="Program and data are kept. You update webtrees itself as usual in webtrees under Control panel → Upgrade; this package update only renews the environment (Apache, PHP) and api4webtrees and never takes webtrees back to an older version."
 fi
@@ -112,6 +114,7 @@ ${page2_fields},
   {"desc":"${T_RESTORE_HINT}"}
  ]},
  {"step_title":"${T_P3}","items":[
+  {"desc":"${T_APPS}"},
   {"desc":"${T_IMPORT}"},
   {"desc":"${T_WAIT}"}
  ]}
