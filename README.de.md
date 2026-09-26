@@ -24,7 +24,7 @@ Das originale, unveränderte [webtrees](https://webtrees.net/) für NAS und Heim
 
 | Plattform | Weg |
 | - | - |
-| Synology (DSM 7.2+, Modelle mit Container Manager) | Paket mit Installationsassistent, siehe [`synology/`](synology/) |
+| Synology (DSM 7.2+, Modelle mit Container Manager) | Paket mit Installationsassistent: `nas4webtrees-….spk` unter [Releases](https://github.com/thobgg/nas4webtrees/releases) laden, dann Paket-Zentrum → Manuelle Installation |
 | TrueNAS SCALE 25.04+ | Apps → Discover → *Install via YAML* mit [`compose/docker-compose.yml`](compose/docker-compose.yml) |
 | UGREEN (UGOS Pro) | Docker → Projekt → Erstellen, Compose-Datei einfügen |
 | TerraMaster (TOS 6) | Docker Manager → Projekt, Compose-Datei einfügen |
@@ -33,7 +33,16 @@ Das originale, unveränderte [webtrees](https://webtrees.net/) für NAS und Heim
 | QNAP | Container Station → Anwendungen, Compose-Datei einfügen |
 | Raspberry Pi, jeder Linux-Server | `docker compose up -d` |
 
-## Schnellstart
+## Synology in Kürze
+
+1. **Container Manager** im Paket-Zentrum installieren (einmalig).
+2. `nas4webtrees-….spk` unter [Releases](https://github.com/thobgg/nas4webtrees/releases) herunterladen.
+3. Paket-Zentrum → *Manuelle Installation* → Datei wählen → Hinweis auf Drittanbieter bestätigen → Assistent
+   ausfüllen (Name des Stammbaums, Administrator, Port, Freigabe für die Sicherung).
+4. webtrees über das DSM-Hauptmenü öffnen (*nas4webtrees*). Der Eintrag *nas4webtrees – Apps verbinden* führt
+   zur Seite für die Apps.
+
+## Schnellstart (Docker Compose)
 
 ```sh
 mkdir webtrees && cd webtrees
