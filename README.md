@@ -31,6 +31,10 @@ with a classic desktop program for Windows and Linux and an app for Android.**
 | :-: | :-: | :-: |
 | <img src="docs/img/setup-en-US.png" alt="Setup page: family tree name, account, private" width="260"> | <img src="docs/img/app-page-de.png" alt="Page App in webtrees with the button Connect with wtWin" width="330"> | <img src="https://raw.githubusercontent.com/thobgg/app4webtrees/main/docs/screenshots/windows-navigator.jpg" alt="wtWin: navigator with the family tree" width="330"> |
 
+| Synology: installation wizard | Synology: Package Center | Synology: main menu |
+| :-: | :-: | :-: |
+| <img src="docs/synology/img/02-stammbaum-administrator.png" alt="Synology wizard: family tree and administrator" width="260"> | <img src="docs/synology/img/06-paket-zentrum.png" alt="Package Center after installation" width="330"> | <img src="docs/synology/img/07-hauptmenue.png" alt="DSM main menu with nas4webtrees" width="330"> |
+
 ## Where it runs
 
 | Platform | How | Guide | Tested |

@@ -32,6 +32,10 @@ bereit, mit einem klassischen Programm für Windows und Linux und einer App für
 | :-: | :-: | :-: |
 | <img src="docs/img/setup-de.png" alt="Einrichtungsseite: Name des Stammbaums, Konto, privat" width="260"> | <img src="docs/img/app-page-de.png" alt="Seite App in webtrees mit dem Knopf Mit wtWin verbinden" width="330"> | <img src="https://raw.githubusercontent.com/thobgg/app4webtrees/main/docs/screenshots/windows-navigator.jpg" alt="wtWin: Navigator mit dem Stammbaum" width="330"> |
 
+| Synology: Installationsassistent | Synology: Paket-Zentrum | Synology: Hauptmenü |
+| :-: | :-: | :-: |
+| <img src="docs/synology/img/02-stammbaum-administrator.png" alt="Synology-Assistent: Stammbaum und Administrator" width="260"> | <img src="docs/synology/img/06-paket-zentrum.png" alt="Paket-Zentrum nach der Installation" width="330"> | <img src="docs/synology/img/07-hauptmenue.png" alt="DSM-Hauptmenü mit nas4webtrees" width="330"> |
+
 ## Wo es läuft
 
 | Plattform | Weg | Anleitung | Getestet |
