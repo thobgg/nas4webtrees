@@ -82,15 +82,15 @@ jobs:
         run: |
           img="ghcr.io/${{ github.repository_owner }}/nas4webtrees:${{ needs.image.outputs.tag }}"
           mkdir -p w b
-          docker run -d --name t -p 8095:80 -e WT_USER=admin -e WT_EMAIL=a@example.org \
+          docker run -d --name rauchtest -p 8095:80 -e WT_USER=admin -e WT_EMAIL=a@example.org \
             -e WT_PASS=rauchtest-passwort -v "$PWD/w:/webtrees" -v "$PWD/b:/backup" "$img"
           for i in $(seq 1 60); do
-            docker logs t 2>&1 | grep -q "Sicherung:" && break
+            docker logs rauchtest 2>&1 | grep -q "Sicherung:" && break
             sleep 5
           done
-          docker logs t 2>&1 | grep "\[nas4webtrees\]"
-          docker logs t 2>&1 | grep -q "Sicherung:" || { echo "::error::keine Sicherung – Einrichtung gescheitert"; exit 1; }
-          docker logs t 2>&1 | grep -q "nur für angemeldete Benutzer" || { echo "::error::Baum nicht privat"; exit 1; }
+          docker logs rauchtest 2>&1 | grep "\[nas4webtrees\]"
+          docker logs rauchtest 2>&1 | grep -q "Sicherung:" || { echo "::error::keine Sicherung – Einrichtung gescheitert"; exit 1; }
+          docker logs rauchtest 2>&1 | grep -q "nur für angemeldete Benutzer" || { echo "::error::Baum nicht privat"; exit 1; }
           test -s b/gedcom/tree1.ged || { echo "::error::GEDCOM fehlt"; exit 1; }
           curl -fsS -o /dev/null http://localhost:8095/public/css/webtrees.min.css
 
