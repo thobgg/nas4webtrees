@@ -1,82 +1,95 @@
+<p align="center"><img src="docs/icon-256.png" alt="" width="96"></p>
+
 # nas4webtrees
 
 [English](README.md) · **Deutsch**
 
-Das originale, unveränderte [webtrees](https://webtrees.net/) für NAS und Heimserver — mit
-[api4webtrees](https://github.com/thobgg/api4webtrees) an Bord, damit sich die Apps **wtAnd**
-(Android), **wtWin** (Windows) und **wtTux** (Linux) aus
-[app4webtrees](https://github.com/thobgg/app4webtrees) sofort verbinden.
+**Dein Stammbaum auf deiner eigenen NAS – das originale [webtrees](https://webtrees.net/), in wenigen Minuten
+bereit, mit einem klassischen Programm für Windows und Linux und einer App für Android.**
 
-- **Natives webtrees, kein Fork.** Beim ersten Start wird die offizielle Release-Datei von
-  [fisharebest/webtrees](https://github.com/fisharebest/webtrees/releases) (mit Prüfsumme) in
-  dein Volume entpackt. Danach gehört die Installation webtrees: Aktualisiert wird wie gewohnt
-  unter *Verwaltung → Aktualisierung*. Ein neues Image fasst sie nie an und setzt sie nie zurück.
-- **Kein Datenbank-Server.** Standard ist SQLite — eine einzige Datei. MySQL/MariaDB und
-  PostgreSQL gehen auch.
-- **Deine GEDCOM-Datei, jede Nacht.** Jeder Stammbaum landet als `backup/gedcom/<baum>.ged`
-  (fester Name, dazu 30 ältere Stände), zusammen mit einer konsistenten Kopie der Datenbank und
-  einem Spiegel aller Fotos. Neu installieren neben der Sicherung holt den letzten Stand zurück.
-- **Vorhandenen Stammbaum mitbringen.** GEDCOM-Datei nach `backup/import/` legen und neu
-  starten: Sie wird in den (noch leeren) Stammbaum übernommen.
-- amd64, arm64 und armv7.
+<p align="center">
+  <a href="https://github.com/thobgg/nas4webtrees/releases/latest"><img src="https://img.shields.io/github/v/release/thobgg/nas4webtrees?label=Synology%20package&logo=synology" alt="Synology package"></a>
+  <a href="https://github.com/thobgg/nas4webtrees/pkgs/container/nas4webtrees"><img src="https://img.shields.io/badge/image-ghcr.io%2Fthobgg%2Fnas4webtrees-2496ED?logo=docker&logoColor=white" alt="Docker image"></a>
+  <img src="https://img.shields.io/badge/arch-amd64%20%7C%20arm64%20%7C%20armv7-555" alt="amd64, arm64, armv7">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="GPL-3.0"></a>
+</p>
+
+- **In Minuten installiert, ohne IT-Kenntnisse.** Auf der Synology ein Paket mit Installationsassistent, überall
+  sonst das Image starten und eine kurze Seite im Browser ausfüllen. Kein Datenbank-Server, kein Webserver, kein PHP.
+- **Das originale webtrees, kein Fork.** Die offizielle Release-Datei, mit Prüfsumme. webtrees aktualisiert sich wie
+  gewohnt unter *Verwaltung → Aktualisierung*; ein neues Image fasst es nie an und setzt es nie zurück.
+- **Arbeiten wie in einem klassischen Genealogie-Programm.** [wtWin](https://github.com/thobgg/app4webtrees) (Windows)
+  und wtTux (Linux) verbinden sich auf der Seite „App“ mit einem Klick – keine Adresse, kein Passwort eintippen. Am
+  Handy verbindet sich [wtAnd](https://github.com/thobgg/app4webtrees) per QR-Code.
+  [api4webtrees](https://github.com/thobgg/api4webtrees) ist vorinstalliert.
+- **Von Anfang an privat.** Ein neuer Stammbaum ist nur für angemeldete Benutzer sichtbar; die Konten für deine
+  Verwandten legst du an.
+- **Deine GEDCOM-Datei, jede Nacht.** Jeder Stammbaum als `backup/gedcom/<baum>.ged` (dazu 30 ältere Stände), eine
+  konsistente Kopie der Datenbank und alle Fotos. Neu installieren neben der Sicherung holt alles zurück.
+- **Updates aus dem Paket-Zentrum.** Synology-Nutzer tragen die Paketquelle einmal ein; neue Versionen erscheinen von selbst.
+
+| Einrichtung im Browser | Ein Klick zum Programm am PC | wtWin unter Windows |
+| :-: | :-: | :-: |
+| <img src="docs/img/setup-de.png" alt="Einrichtungsseite: Name des Stammbaums, Konto, privat" width="260"> | <img src="docs/img/app-page-de.png" alt="Seite App in webtrees mit dem Knopf Mit wtWin verbinden" width="330"> | <img src="https://raw.githubusercontent.com/thobgg/app4webtrees/main/docs/screenshots/windows-navigator.jpg" alt="wtWin: Navigator mit dem Stammbaum" width="330"> |
 
 ## Wo es läuft
 
-| Plattform | Weg |
-| - | - |
-| Synology (DSM 7.2+, Modelle mit Container Manager) | Paket mit Installationsassistent: `nas4webtrees-….spk` unter [Releases](https://github.com/thobgg/nas4webtrees/releases) laden, dann Paket-Zentrum → Manuelle Installation |
-| TrueNAS SCALE 25.04+ | Apps → Discover → *Install via YAML* mit [`compose/docker-compose.yml`](compose/docker-compose.yml) |
-| UGREEN (UGOS Pro) | Docker → Projekt → Erstellen, Compose-Datei einfügen |
-| TerraMaster (TOS 6) | Docker Manager → Projekt, Compose-Datei einfügen |
-| Asustor (ADM) | Portainer aus App Central → Stacks, Compose-Datei einfügen |
-| Unraid | Vorlage [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) |
-| QNAP | Container Station → Anwendungen, Compose-Datei einfügen |
-| Raspberry Pi, jeder Linux-Server | `docker compose up -d` |
-
-## Synology in Kürze
-
-Ausführlich mit Bildern: **[Anleitung für Synology](docs/synology/anleitung.de.md)**.
-
-1. **Container Manager** im Paket-Zentrum installieren (einmalig).
-2. `nas4webtrees-….spk` unter [Releases](https://github.com/thobgg/nas4webtrees/releases) herunterladen.
-3. Paket-Zentrum → *Manuelle Installation* → Datei wählen → Hinweis auf Drittanbieter bestätigen → Assistent
-   ausfüllen (Name des Stammbaums, Administrator, Port, Freigabe für die Sicherung).
-4. webtrees über das DSM-Hauptmenü öffnen (*nas4webtrees*). Der Eintrag *nas4webtrees – Apps verbinden* führt
-   zur Seite für die Apps.
+| Plattform | Weg | Anleitung |
+| - | - | - |
+| **Synology** (DSM 7.2+, Modelle mit Container Manager) | Paket mit Installationsassistent, Updates über die [Paketquelle](https://thobgg.github.io/nas4webtrees/) | [mit Screenshots](docs/synology/anleitung.de.md) |
+| **QNAP** (Container Station 3) | Applications → Create, Compose-Datei einfügen | [Anleitung](docs/qnap/anleitung.de.md) |
+| **UGREEN** (UGOS Pro) | Docker → Project → Create, Compose-Datei einfügen | [Anleitung](docs/ugreen/anleitung.de.md) |
+| **TrueNAS** ab 25.04 | Apps → Discover → *Install via YAML* | [Anleitung](docs/truenas/anleitung.de.md) |
+| **Unraid** | Vorlage [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) (Community Applications in Vorbereitung) | – |
+| **CasaOS / ZimaOS** | BigBear-App-Store (in Vorbereitung) oder Compose-Datei einfügen | – |
+| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [Store](https://github.com/thobgg/nas4webtrees-umbrel) |
+| **TerraMaster** (TOS 6) | Docker Manager → Project, Compose-Datei einfügen | – |
+| **Asustor** (ADM) | Portainer aus App Central → Stacks, Compose-Datei einfügen | – |
+| **Raspberry Pi**, jeder Linux-Server | `docker compose up -d` | unten |
 
 ## Schnellstart (Docker Compose)
 
 ```sh
 mkdir webtrees && cd webtrees
 curl -O https://raw.githubusercontent.com/thobgg/nas4webtrees/main/compose/docker-compose.yml
-echo 'ein-langes-passwort' > webtrees_admin_password.txt   # erstes Admin-Passwort
-# docker-compose.yml anpassen: Name, E-Mail, Port, Zeitzone
 docker compose up -d
 ```
 
-Dann `http://<deine-nas>:8095` öffnen. Ohne `WT_USER`/`WT_EMAIL`/`WT_PASS` erscheint stattdessen
-der Einrichtungsassistent von webtrees — dort *SQLite* wählen.
+`http://<deine-nas>:8095` öffnen und die kurze Einrichtungsseite ausfüllen: Name des Stammbaums, dein Konto, privat
+ja oder nein. Keine Datenbankfrage, kein Passwort in einer Datei. Kommt der Aufruf nicht aus dem Heimnetz, fragt die
+Seite nach einem Einrichtungscode aus dem Container-Protokoll (`docker logs webtrees`). Einrichtung ohne Browser
+(Automatisierung): `WT_USER`, `WT_EMAIL` und `WT_PASS_FILE` setzen, siehe [Settings](README.md#settings).
 
-Alle Einstellungen stehen in der [englischen Anleitung](README.md#settings).
+## Synology in Kürze
 
-## Zugriff von unterwegs
-
-Den Reverse Proxy der NAS davorschalten (Synology: *Systemsteuerung → Anmeldeportal → Erweitert →
-Reverse Proxy*), außen HTTPS, innen `http://localhost:8095`. Das Image wertet
-`X-Forwarded-Proto` aus, webtrees erzeugt dann `https://`-Links.
+1. **Container Manager** aus dem Paket-Zentrum installieren (einmalig).
+2. Paket-Zentrum → *Einstellungen* → *Paketquellen* → *Hinzufügen*: `https://thobgg.github.io/nas4webtrees/index.json`
+   – oder `nas4webtrees-….spk` von den [Releases](https://github.com/thobgg/nas4webtrees/releases) laden und über
+   *Manuelle Installation* einspielen.
+3. nas4webtrees installieren, den Drittanbieter-Hinweis bestätigen, den Assistenten ausfüllen (Stammbaum,
+   Administrator, Port, Ordner für die Sicherung).
+4. webtrees im DSM-Hauptmenü öffnen (*nas4webtrees*); *nas4webtrees – Apps verbinden* führt zur Seite für die Apps.
 
 ## Apps verbinden
 
-In webtrees anmelden, im Menü **App** öffnen und den zwei Schritten dort folgen. Mehr dazu bei
-[api4webtrees](https://github.com/thobgg/api4webtrees/blob/main/README.de.md).
+In webtrees anmelden und die Seite **App** öffnen. Am PC: wtWin (oder wtTux) herunterladen, installieren, starten
+und **Mit wtWin verbinden** klicken – das Programm übernimmt Adresse und Anmeldung und fragt einmal nach. Am Handy:
+wtAnd installieren und den QR-Code scannen. Für Mac, iPhone und iPad gibt es noch keine App – dort webtrees im
+Browser nutzen. Mehr: [api4webtrees](https://github.com/thobgg/api4webtrees/blob/main/README.de.md).
+
+## Zugriff von unterwegs
+
+Den Reverse Proxy der NAS davorschalten (Synology: *Systemsteuerung → Anmeldeportal → Erweitert → Reverse Proxy*),
+außen HTTPS, innen `http://localhost:8095`. Das Image beachtet `X-Forwarded-Proto`, webtrees erzeugt dann
+`https://`-Links. Zu Hause verbinden sich die Apps auch über `http://`.
 
 ## Kein offizielles webtrees-Projekt
 
-nas4webtrees ist ein unabhängiges Gemeinschaftsprojekt, das webtrees für NAS-Geräte verpackt. Es
-gehört nicht zum webtrees-Projekt und wird von ihm nicht unterstützt. Zu webtrees selbst:
-[webtrees.net](https://webtrees.net/).
+nas4webtrees ist ein unabhängiges Gemeinschaftsprojekt, das webtrees für NAS verpackt. Es steht in keiner
+Verbindung zum webtrees-Projekt und wird von ihm nicht unterstützt. Zu webtrees selbst:
+[webtrees.net](https://webtrees.net/). Fragen und Fehler: [Issues](https://github.com/thobgg/nas4webtrees/issues).
 
 ## Lizenz
 
-GPL-3.0-or-later, wie webtrees und api4webtrees. webtrees ist © das webtrees-Entwicklerteam;
-dieses Projekt verpackt es nur.
+GPL-3.0-or-later, wie webtrees und api4webtrees. webtrees ist © das webtrees-Entwicklerteam; dieses Projekt
+verpackt es nur.
