@@ -5,7 +5,7 @@
 # und wird über Verwaltung → Aktualisierung auf dem normalen Weg aktualisiert.
 WEBTREES=2.2.6
 WEBTREES_SHA256=c6b82f0269733b71de1a160a93eb32029e3467674e9bbfe3956d46a8bb04f925
-API4WEBTREES=1.9.4
-API4WEBTREES_SHA256=6f01b3fa7948c93781c350f970cdfd199e9020050f441910bd0414154f7feffe
+API4WEBTREES=1.9.5
+API4WEBTREES_SHA256=fc46ca5e336000299efcec9813203b26cc56f967e227df96452d4fcd06309163
 # Hochzählen bei jeder Änderung am Image ohne neue webtrees-Fassung
-REVISION=5
+REVISION=6
