@@ -24,12 +24,12 @@ connect right away.
 | Platform | How |
 | - | - |
 | Synology (DSM 7.2+, models with Container Manager) | Package with installation wizard: download `nas4webtrees-….spk` from [Releases](https://github.com/thobgg/nas4webtrees/releases), then Package Center → Manual Install |
-| TrueNAS SCALE 25.04+ | Apps → Discover → *Install via YAML* with [`compose/docker-compose.yml`](compose/docker-compose.yml) |
-| UGREEN (UGOS Pro) | Docker → Project → Create, paste the compose file |
+| TrueNAS 25.04+ | Apps → Discover → *Install via YAML* — [guide (German)](docs/truenas/anleitung.de.md) |
+| UGREEN (UGOS Pro) | Docker → Project → Create, paste the compose file — [guide (German)](docs/ugreen/anleitung.de.md) |
 | TerraMaster (TOS 6) | Docker Manager → Project, paste the compose file |
 | Asustor (ADM) | Portainer from App Central → Stacks, paste the compose file |
 | Unraid | Template [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) |
-| QNAP | Container Station → Applications, paste the compose file |
+| QNAP | Container Station → Applications → Create — [guide (German)](docs/qnap/anleitung.de.md) |
 | Raspberry Pi, any Linux server | `docker compose up -d` |
 
 ## Synology in short

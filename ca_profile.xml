@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<CommunityApplications>
+  <Profile>nas4webtrees: the original, unmodified [webtrees](https://webtrees.net/) (online genealogy) for NAS and home servers — SQLite, a short setup page in the browser, nightly GEDCOM backups and [api4webtrees](https://github.com/thobgg/api4webtrees) preinstalled, so the wtAnd, wtWin and wtTux apps connect with one click. Community project, not an official part of webtrees.</Profile>
+  <Icon>https://raw.githubusercontent.com/thobgg/nas4webtrees/main/docs/icon-256.png</Icon>
+  <WebPage>https://github.com/thobgg/nas4webtrees</WebPage>
+</CommunityApplications>

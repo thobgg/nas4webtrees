@@ -10,6 +10,10 @@
   <Project>https://github.com/thobgg/nas4webtrees</Project>
   <Overview>The original, unmodified webtrees (online genealogy) with SQLite — no database server needed. Includes api4webtrees so the wtAnd (Android), wtWin (Windows) and wtTux (Linux) apps connect right away. Nightly backup of every family tree as a GEDCOM file, plus database and media. webtrees updates itself via its own control panel. After starting, open the web UI and fill in the short setup page.</Overview>
   <Category>Productivity: Other:</Category>
+  <ExtraSearchTerms>genealogy gedcom family tree ahnenforschung stammbaum</ExtraSearchTerms>
+  <License>GPL-3.0</License>
+  <ReadMe>https://github.com/thobgg/nas4webtrees#readme</ReadMe>
+  <Changes>See https://github.com/thobgg/nas4webtrees/blob/main/CHANGES.md</Changes>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/thobgg/nas4webtrees/main/unraid/nas4webtrees.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/thobgg/nas4webtrees/main/docs/icon-256.png</Icon>
