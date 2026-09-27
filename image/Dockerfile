@@ -4,11 +4,6 @@
 # Versionen und Prüfsummen kommen als Build-Argumente aus ../VERSIONS.
 FROM php:8.4-apache
 
-ARG WEBTREES_VERSION
-ARG WEBTREES_SHA256
-ARG API4WEBTREES_VERSION
-ARG API4WEBTREES_SHA256
-
 # PHP-Erweiterungen, die webtrees braucht oder nutzt (imagick: schnellere Vorschaubilder).
 # install-php-extensions holt je Architektur die passenden Pakete und räumt danach auf.
 COPY --from=mlocati/php-extension-installer:2.12.0 /usr/bin/install-php-extensions /usr/local/bin/
@@ -16,6 +11,14 @@ RUN install-php-extensions gd intl zip exif pdo_mysql pdo_pgsql imagick \
  && apt-get update \
  && apt-get install -y --no-install-recommends python3 curl unzip \
  && rm -rf /var/lib/apt/lists/*
+
+# Die Build-Argumente erst hier: Jede neue Versionsnummer macht den Zwischenspeicher für alle
+# folgenden RUN-Schritte ungültig. Stünden sie oben, würden bei jedem Modul-Update auch die
+# PHP-Erweiterungen neu kompiliert — unter Emulation für arm64/armv7 rund 40 Minuten.
+ARG WEBTREES_VERSION
+ARG WEBTREES_SHA256
+ARG API4WEBTREES_VERSION
+ARG API4WEBTREES_SHA256
 
 # Offizielle Release-Datei von github.com/fisharebest/webtrees, unverändert. Sie wird erst beim
 # ersten Start in das Volume entpackt; danach gehört die Installation webtrees selbst und wird
