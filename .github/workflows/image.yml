@@ -8,7 +8,7 @@ name: image
 on:
   push:
     branches: [main]
-    paths: [image/**, synology/**, VERSIONS, .github/**]
+    paths: [image/**, synology/**, VERSIONS, CHANGES.md, .github/**]
   pull_request:
     paths: [image/**, synology/**, VERSIONS, .github/**]
   schedule:
@@ -126,10 +126,13 @@ jobs:
           if gh release view "v${v}" >/dev/null 2>&1; then
             echo "Release v${v} gibt es schon"
           else
+            # Oberster Abschnitt aus CHANGES.md zuerst, dann der feste Text
+            awk '/^## /{n++; if(n==2) exit; next} n==1' CHANGES.md > notes.md
+            echo >> notes.md
             sed -e "s/@VERSION@/${v}/g" -e "s/@IMAGE@/${{ needs.image.outputs.tag }}/g" \
               -e "s/@API@/$(sed -n 's/^API4WEBTREES=//p' VERSIONS)/g" \
               -e "s/@WEBTREES@/$(sed -n 's/^WEBTREES=//p' VERSIONS)/g" \
-              .github/release-notes.md > notes.md
+              .github/release-notes.md >> notes.md
             gh release create "v${v}" "${{ steps.spk.outputs.file }}" --target "${GITHUB_SHA}" \
               --title "nas4webtrees ${v} – Synology" --notes-file notes.md --latest
           fi
@@ -140,7 +143,7 @@ jobs:
           site="https://${{ github.repository_owner }}.github.io/nas4webtrees"
           python3 .github/scripts/package_source.py "${{ steps.spk.outputs.file }}" dist/pkg \
             "https://github.com/${{ github.repository }}/releases/download/v${v}/nas4webtrees-${v}.spk" \
-            site "${site}"
+            site "${site}" CHANGES.md
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

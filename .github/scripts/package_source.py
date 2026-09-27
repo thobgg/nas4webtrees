@@ -4,7 +4,9 @@
 DSM 7 liest unter der eingetragenen Adresse eine JSON-Datei {"packages": [...]} und zeigt neue
 Versionen als Update an. Format wie https://github.com/nhymxu/spkrepo (tools/dsm_catalog.py).
 
-    package_source.py <spk> <pkg-dir mit INFO und Icons> <download-url> <ziel-ordner> <seiten-url>
+    package_source.py <spk> <pkg-dir mit INFO und Icons> <download-url> <ziel-ordner> <seiten-url> [CHANGES.md]
+
+Aus CHANGES.md kommt der oberste Abschnitt als „Was ist neu“, davor die Versionen aus VERSIONS.
 """
 import hashlib
 import html
@@ -26,6 +28,22 @@ def info(path):
 
 
 i = info(os.path.join(pkgdir, "INFO"))
+
+
+def news(path):
+    """Oberster Abschnitt (## …) von CHANGES.md als schlichter Text."""
+    if not path or not os.path.exists(path):
+        return ""
+    parts = open(path, encoding="utf-8").read().split("\n## ")
+    if len(parts) < 2:
+        return ""
+    body = parts[1].split("\n", 1)[1] if "\n" in parts[1] else ""
+    return " ".join(body.replace("**", "").replace("`", "").split())
+
+
+versions = info(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "VERSIONS"))
+changelog = f"webtrees {versions.get('WEBTREES', '?')}, api4webtrees {versions.get('API4WEBTREES', '?')}. " + (
+    news(sys.argv[6] if len(sys.argv) > 6 else "") or "Details: https://github.com/thobgg/nas4webtrees/releases")
 md5 = hashlib.md5(open(spk, "rb").read()).hexdigest()
 os.makedirs(out, exist_ok=True)
 shutil.copy(os.path.join(pkgdir, "PACKAGE_ICON.PNG"), os.path.join(out, "icon_72.png"))
@@ -49,7 +67,7 @@ entry = {
     "maintainer_url": i.get("maintainer_url", ""),
     "distributor": i.get("maintainer", ""),
     "distributor_url": "https://github.com/thobgg/nas4webtrees",
-    "changelog": f"webtrees für die NAS, Version {i['version']}. Details: https://github.com/thobgg/nas4webtrees/releases",
+    "changelog": changelog,
     "snapshot": [],
 }
 with open(os.path.join(out, "index.json"), "w", encoding="utf-8") as f:

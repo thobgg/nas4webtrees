@@ -130,7 +130,10 @@ Tipp: Nimm den Ordner in deine übliche Datensicherung auf, zum Beispiel Hyper B
   dann meldet das Paket-Zentrum neue Versionen von selbst:
   *Paket-Zentrum → Einstellungen → Paketquellen → Hinzufügen*, Name `nas4webtrees`, Ort
   `https://thobgg.github.io/nas4webtrees/index.json`. Updates erscheinen danach unter
-  *Installiert*, das Paket selbst auch unter *Community*.
+  *Installiert*, das Paket selbst auch unter *Community*. Zum Aktualisieren auf den **Namen
+  „nas4webtrees“** klicken und auf der Detailseite **Aktualisierung** wählen – der grüne Knopf direkt in
+  der Liste öffnet unter DSM 7.4 stattdessen webtrees. Bequemer: unter *Einstellungen → Automatisch
+  aktualisieren* nas4webtrees auswählen, dann läuft jedes Update von selbst.
   Ohne Paketquelle: neue .spk-Datei von der Release-Seite laden und über *Manuelle Installation*
   einspielen.
 
