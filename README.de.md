@@ -34,18 +34,23 @@ bereit, mit einem klassischen Programm für Windows und Linux und einer App für
 
 ## Wo es läuft
 
-| Plattform | Weg | Anleitung |
-| - | - | - |
-| **Synology** (DSM 7.2+, Modelle mit Container Manager) | Paket mit Installationsassistent, Updates über die [Paketquelle](https://thobgg.github.io/nas4webtrees/) | [mit Screenshots](docs/synology/anleitung.de.md) |
-| **QNAP** (Container Station 3) | Applications → Create, Compose-Datei einfügen | [Anleitung](docs/qnap/anleitung.de.md) |
-| **UGREEN** (UGOS Pro) | Docker → Project → Create, Compose-Datei einfügen | [Anleitung](docs/ugreen/anleitung.de.md) |
-| **TrueNAS** ab 25.04 | Apps → Discover → *Install via YAML* | [Anleitung](docs/truenas/anleitung.de.md) |
-| **Unraid** | Vorlage [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) (Community Applications in Vorbereitung) | – |
-| **CasaOS / ZimaOS** | BigBear-App-Store (in Vorbereitung) oder Compose-Datei einfügen | – |
-| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [Store](https://github.com/thobgg/nas4webtrees-umbrel) |
-| **TerraMaster** (TOS 6) | Docker Manager → Project, Compose-Datei einfügen | – |
-| **Asustor** (ADM) | Portainer aus App Central → Stacks, Compose-Datei einfügen | – |
-| **Raspberry Pi**, jeder Linux-Server | `docker compose up -d` | unten |
+| Plattform | Weg | Anleitung | Getestet |
+| - | - | - | - |
+| **Synology** (DSM 7.2+, Modelle mit Container Manager) | Paket mit Installationsassistent, Updates über die [Paketquelle](https://thobgg.github.io/nas4webtrees/) | [mit Screenshots](docs/synology/anleitung.de.md) | ✅ DS225+ (DSM 7.4.1), Virtual DSM |
+| **Linux-Server, Raspberry Pi** | `docker compose up -d`, dann die Einrichtungsseite | unten | ✅ amd64 · Images für arm64/armv7 gebaut, noch kein Bericht |
+| **QNAP** (Container Station 3) | Applications → Create, Compose-Datei einfügen | [Anleitung](docs/qnap/anleitung.de.md) | ⬜ noch nicht |
+| **UGREEN** (UGOS Pro) | Docker → Project → Create, Compose-Datei einfügen | [Anleitung](docs/ugreen/anleitung.de.md) | ⬜ noch nicht |
+| **TrueNAS** ab 25.04 | Apps → Discover → *Install via YAML* | [Anleitung](docs/truenas/anleitung.de.md) | ⬜ noch nicht |
+| **CasaOS / ZimaOS** | Compose-Datei einfügen; Aufnahme in den BigBear-App-Store beantragt | – | 🟡 Compose-Datei getestet, nicht auf dem Gerät |
+| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [Store](https://github.com/thobgg/nas4webtrees-umbrel) | ⬜ noch nicht |
+| **Unraid** | Vorlage [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) | – | ⬜ noch nicht |
+| **TerraMaster** (TOS 6) | Docker Manager → Project, Compose-Datei einfügen | – | ⬜ noch nicht |
+| **Asustor** (ADM) | Portainer aus App Central → Stacks, Compose-Datei einfügen | – | ⬜ noch nicht |
+| **Windows- oder Mac-PC ohne NAS** | noch nicht – geplant: ein eigener Stammbaum direkt in wtWin | – | – |
+
+✅ auf dem Gerät getestet · 🟡 teilweise · ⬜ sollte laufen (dasselbe Image), auf dem Gerät noch nicht getestet.
+**Auf einem dieser Geräte installiert?** Erzähl uns, wie es lief – ein kurzer
+[Installationsbericht](https://github.com/thobgg/nas4webtrees/issues/new?template=installation-report.yml) hilft allen, die nach dir kommen.
 
 ## Schnellstart (Docker Compose)
 

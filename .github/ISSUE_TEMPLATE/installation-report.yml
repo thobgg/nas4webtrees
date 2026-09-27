@@ -1,0 +1,39 @@
+name: Installation report / Installationsbericht
+description: Tell us how nas4webtrees ran on your device – it helps the next person. / Wie lief es auf deinem Gerät?
+title: "Installation report: <device>"
+labels: [installation-report]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Device and system / Gerät und System
+      placeholder: e.g. QNAP TS-464, QTS 5.2.1 · UGREEN DXP4800, UGOS Pro 1.3
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result / Ergebnis
+      options:
+        - Works as described / Läuft wie beschrieben
+        - Works, but the guide needs a fix / Läuft, aber die Anleitung stimmt nicht ganz
+        - Does not work / Läuft nicht
+    validations:
+      required: true
+  - type: input
+    id: method
+    attributes:
+      label: How did you install? / Wie installiert?
+      placeholder: e.g. guide docs/qnap, Synology package, docker compose, Umbrel store
+  - type: textarea
+    id: notes
+    attributes:
+      label: What happened, what was different? / Was ist passiert, was war anders?
+      description: Menu names that differed, error messages, lines with [nas4webtrees] from the container log. / Abweichende Menünamen, Fehlermeldungen, Zeilen mit [nas4webtrees] aus dem Protokoll.
+  - type: checkboxes
+    id: apps
+    attributes:
+      label: Apps
+      options:
+        - label: wtWin/wtTux connected with one click / wtWin/wtTux mit einem Klick verbunden
+        - label: wtAnd connected via QR code / wtAnd per QR-Code verbunden

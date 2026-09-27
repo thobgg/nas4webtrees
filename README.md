@@ -33,18 +33,23 @@ with a classic desktop program for Windows and Linux and an app for Android.**
 
 ## Where it runs
 
-| Platform | How | Guide |
-| - | - | - |
-| **Synology** (DSM 7.2+, models with Container Manager) | Package with installation wizard, updates via the [package source](https://thobgg.github.io/nas4webtrees/) | [German, with screenshots](docs/synology/anleitung.de.md) |
-| **QNAP** (Container Station 3) | Applications → Create, paste the compose file | [German](docs/qnap/anleitung.de.md) |
-| **UGREEN** (UGOS Pro) | Docker → Project → Create, paste the compose file | [German](docs/ugreen/anleitung.de.md) |
-| **TrueNAS** 25.04+ | Apps → Discover → *Install via YAML* | [German](docs/truenas/anleitung.de.md) |
-| **Unraid** | Template [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) (Community Applications pending) | – |
-| **CasaOS / ZimaOS** | BigBear App Store (pending) or paste the compose file | – |
-| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [store](https://github.com/thobgg/nas4webtrees-umbrel) |
-| **TerraMaster** (TOS 6) | Docker Manager → Project, paste the compose file | – |
-| **Asustor** (ADM) | Portainer from App Central → Stacks, paste the compose file | – |
-| **Raspberry Pi**, any Linux server | `docker compose up -d` | below |
+| Platform | How | Guide | Tested |
+| - | - | - | - |
+| **Synology** (DSM 7.2+, models with Container Manager) | Package with installation wizard, updates via the [package source](https://thobgg.github.io/nas4webtrees/) | [German, with screenshots](docs/synology/anleitung.de.md) | ✅ DS225+ (DSM 7.4.1), Virtual DSM |
+| **Linux server, Raspberry Pi** | `docker compose up -d`, then the setup page | below | ✅ amd64 · arm64/armv7 images built, not yet reported |
+| **QNAP** (Container Station 3) | Applications → Create, paste the compose file | [German](docs/qnap/anleitung.de.md) | ⬜ not yet |
+| **UGREEN** (UGOS Pro) | Docker → Project → Create, paste the compose file | [German](docs/ugreen/anleitung.de.md) | ⬜ not yet |
+| **TrueNAS** 25.04+ | Apps → Discover → *Install via YAML* | [German](docs/truenas/anleitung.de.md) | ⬜ not yet |
+| **CasaOS / ZimaOS** | Paste the compose file; BigBear App Store requested | – | 🟡 compose file tested, not on the device |
+| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [store](https://github.com/thobgg/nas4webtrees-umbrel) | ⬜ not yet |
+| **Unraid** | Template [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) | – | ⬜ not yet |
+| **TerraMaster** (TOS 6) | Docker Manager → Project, paste the compose file | – | ⬜ not yet |
+| **Asustor** (ADM) | Portainer from App Central → Stacks, paste the compose file | – | ⬜ not yet |
+| **Windows or Mac PC without a NAS** | not yet – planned: a local family tree inside wtWin | – | – |
+
+✅ tested on the device · 🟡 partly · ⬜ should work (same image), not yet tested on the device.
+**Installed it on one of these?** Please tell us how it went – a short [installation report](https://github.com/thobgg/nas4webtrees/issues/new?template=installation-report.yml) helps
+everyone who comes after you.
 
 ## Quick start (Docker Compose)
 
