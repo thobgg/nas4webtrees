@@ -3,6 +3,9 @@
 Der oberste Abschnitt erscheint im Paket-Zentrum unter „Was ist neu“ und im Release auf GitHub. Leser sind
 Synology-Nutzer: schreiben, was sich auf ihrer NAS ändert (oder „keine Änderung für die Synology“).
 
+## 27.09.2026 (Automatik)
+Keine Änderung für die Synology – nur interne Automatik (der Umbrel-Store zieht neue Versionen jetzt selbst nach).
+
 ## 27.09.2026 (Einrichtung im Browser)
 Ohne Synology-Paket genügt jetzt: Image starten, webtrees im Browser öffnen, eine kurze Seite ausfüllen –
 Name des Stammbaums, dein Konto, privat ja oder nein. Keine Datenbankfrage, kein Passwort in einer Datei.

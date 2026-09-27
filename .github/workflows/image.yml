@@ -171,3 +171,19 @@ jobs:
           path: site
       - uses: actions/deploy-pages@v4
         id: pages
+
+      - name: Umbrel-Store nachziehen
+        # Neue Image-Version auch in thobgg/nas4webtrees-umbrel (Deploy-Key mit Schreibrecht nur dort).
+        env:
+          KEY: ${{ secrets.UMBREL_DEPLOY_KEY }}
+        run: |
+          [ -n "${KEY}" ] || { echo "kein UMBREL_DEPLOY_KEY – übersprungen"; exit 0; }
+          mkdir -p ~/.ssh && printf '%s\n' "${KEY}" > ~/.ssh/umbrel && chmod 600 ~/.ssh/umbrel
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/umbrel -o StrictHostKeyChecking=accept-new"
+          git clone -q "git@github.com:${{ github.repository_owner }}/nas4webtrees-umbrel.git" umbrel
+          cd umbrel
+          python3 ../.github/scripts/bump_umbrel.py thobgg-nas4webtrees "${{ needs.image.outputs.tag }}"
+          if git diff --quiet; then echo "Umbrel-Store schon aktuell"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qam "nas4webtrees ${{ needs.image.outputs.tag }}"
+          git push -q origin HEAD
