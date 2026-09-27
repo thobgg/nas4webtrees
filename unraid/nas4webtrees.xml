@@ -8,7 +8,7 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/thobgg/nas4webtrees/issues</Support>
   <Project>https://github.com/thobgg/nas4webtrees</Project>
-  <Overview>The original, unmodified webtrees (online genealogy) with SQLite — no database server needed. Includes api4webtrees so the wtAnd (Android), wtWin (Windows) and wtTux (Linux) apps connect right away. Nightly backup of every family tree as a GEDCOM file, plus database and media. webtrees updates itself via its own control panel.</Overview>
+  <Overview>The original, unmodified webtrees (online genealogy) with SQLite — no database server needed. Includes api4webtrees so the wtAnd (Android), wtWin (Windows) and wtTux (Linux) apps connect right away. Nightly backup of every family tree as a GEDCOM file, plus database and media. webtrees updates itself via its own control panel. After starting, open the web UI and fill in the short setup page.</Overview>
   <Category>Productivity: Other:</Category>
   <WebUI>http://[IP]:[PORT:80]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/thobgg/nas4webtrees/main/unraid/nas4webtrees.xml</TemplateURL>
@@ -19,9 +19,9 @@
   <Config Name="PUID" Target="PUID" Default="99" Description="User ID for files" Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
   <Config Name="PGID" Target="PGID" Default="100" Description="Group ID for files" Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
   <Config Name="Time zone" Target="TZ" Default="Europe/Berlin" Description="IANA time zone, e.g. Europe/Berlin" Type="Variable" Display="always" Required="false" Mask="false">Europe/Berlin</Config>
-  <Config Name="Admin user" Target="WT_USER" Default="" Description="Optional: create this administrator on first start. Leave empty to use the webtrees setup wizard in the browser." Type="Variable" Display="always" Required="false" Mask="false"/>
-  <Config Name="Admin email" Target="WT_EMAIL" Default="" Description="Optional, with Admin user" Type="Variable" Display="always" Required="false" Mask="false"/>
-  <Config Name="Admin password" Target="WT_PASS" Default="" Description="Optional, with Admin user; only used on first start" Type="Variable" Display="always" Required="false" Mask="true"/>
-  <Config Name="Private tree" Target="WT_PRIVATE" Default="true" Description="New family tree only for signed-in users (true) or public like webtrees default (false)" Type="Variable" Display="always" Required="false" Mask="false">true</Config>
-  <Config Name="Language" Target="WT_LANG" Default="en-US" Description="Language for setup, e.g. de, en-US, nl, fr" Type="Variable" Display="advanced" Required="false" Mask="false">en-US</Config>
+  <Config Name="Admin user" Target="WT_USER" Default="" Description="Optional: create this administrator on first start. Leave empty to set up in the browser (short page: tree name, your account)." Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Admin email" Target="WT_EMAIL" Default="" Description="Optional, with Admin user" Type="Variable" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Admin password" Target="WT_PASS" Default="" Description="Optional, with Admin user; only used on first start" Type="Variable" Display="advanced" Required="false" Mask="true"/>
+  <Config Name="Private tree" Target="WT_PRIVATE" Default="true" Description="New family tree only for signed-in users (true) or public like webtrees default (false); the setup page asks too" Type="Variable" Display="advanced" Required="false" Mask="false">true</Config>
+  <Config Name="Language" Target="WT_LANG" Default="" Description="Optional: language for setup, e.g. de or en-US (otherwise the browser language)" Type="Variable" Display="advanced" Required="false" Mask="false"/>
 </Container>

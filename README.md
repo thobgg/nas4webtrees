@@ -48,21 +48,22 @@ Step by step with screenshots (German): **[Synology guide](docs/synology/anleitu
 ```sh
 mkdir webtrees && cd webtrees
 curl -O https://raw.githubusercontent.com/thobgg/nas4webtrees/main/compose/docker-compose.yml
-echo 'a-long-password' > webtrees_admin_password.txt   # first admin password
-# edit docker-compose.yml: name, email, port, time zone
 docker compose up -d
 ```
 
-Open `http://<your-nas>:8095`. Without `WT_USER`/`WT_EMAIL`/`WT_PASS` the webtrees setup wizard
-appears instead — choose *SQLite* there.
+Open `http://<your-nas>:8095` and fill in the short setup page: name of the family tree, your account,
+private yes/no. No database questions, no password in any file. If the page is not opened from your home
+network, it asks for a setup code shown in the container log (`docker logs webtrees`).
+
+Setup without a browser (for automation): set `WT_USER`, `WT_EMAIL` and `WT_PASS_FILE` (see below).
 
 ## Settings
 
 | Variable | Default | Meaning |
 | - | - | - |
-| `WT_USER`, `WT_NAME`, `WT_EMAIL` | – | Administrator created on first start |
+| `WT_USER`, `WT_NAME`, `WT_EMAIL` | – | Administrator created on first start (instead of the setup page) |
 | `WT_PASS` / `WT_PASS_FILE` | – | Their password (prefer the file variant: Docker secret) |
-| `WT_LANG` | `en-US` | Language for setup (`de`, `nl`, `fr`, …) |
+| `WT_LANG` | `en-US` (setup page: browser language) | Language for setup and visitors (`de`, `nl`, `fr`, …) |
 | `WT_TREE`, `WT_TREE_TITLE` | `tree1`, `My family tree` | First family tree |
 | `WT_RESTORE` | `true` | Restore from `/backup` on a fresh install |
 | `WT_PRIVATE` | `true` | New family tree only for signed-in users, no self-registration (the administrator creates accounts). `false` keeps the webtrees default: public tree, living people hidden |

@@ -7,10 +7,11 @@ Bereitet vor, startet einen Nebenprozess und ersetzt sich dann per exec durch Ap
   /webtrees entpacken. Eine vorhandene Installation wird nie angefasst — sie gehört webtrees und
   wird über dessen eigene Aktualisierung gepflegt; das übersteht jedes neue Image. api4webtrees
   wird installiert, wenn es fehlt, und ersetzt, wenn das Image eine neuere Fassung mitbringt.
-- Einrichtung: Ohne Angaben erscheint der normale Einrichtungsassistent von webtrees im Browser.
-  Mit Angaben (Umgebung WT_USER, WT_EMAIL, WT_PASS_FILE … oder /config/setup.json) füllt der
-  Nebenprozess diesen Assistenten selbst aus — SQLite, sofern nichts anderes verlangt ist.
-  Ein Passwort aus setup.json wird danach aus der Datei gelöscht.
+- Einrichtung: Mit Angaben (Umgebung WT_USER, WT_EMAIL, WT_PASS_FILE … oder /config/setup.json)
+  füllt der Nebenprozess den Einrichtungsassistenten von webtrees selbst aus — SQLite, sofern nichts
+  anderes verlangt ist; ein Passwort aus setup.json wird danach aus der Datei gelöscht. Ohne Angaben
+  erscheint im Browser eine eigene, kurze Einrichtungsseite (/opt/nas4webtrees/setup): Stammbaum,
+  Konto, privat ja/nein — keine Datenbankfrage. Ihre Angaben verarbeitet der Nebenprozess genauso.
 - Wiederherstellung: Neuinstallation neben einer vorhandenen Sicherung übernimmt deren letzten
   Stand, aber nie über eine vorhandene Datenbank.
 - Ersteinrichtung: Zeitzone, ein leerer Stammbaum, optional GEDCOM-Import aus /backup/import.
@@ -50,6 +51,13 @@ KEEP_GEDCOM = int(ENV.get("BACKUP_KEEP_GEDCOM", "30"))
 KEEP_DB = int(ENV.get("BACKUP_KEEP_DB", "7"))
 NO_TARGET_MARK = ".nas4webtrees-no-target"  # vom Synology-Paket, wenn die Freigabe fehlt
 TBLPFX = ENV.get("DB_PREFIX", "wt_")
+# Einrichtung im Browser: Apache leitet um, solange SETUP_PAGE existiert (webtrees.conf).
+RUN_DIR = "/run/nas4webtrees"
+SETUP_PAGE = os.path.join(RUN_DIR, "setup-page")
+SETUP_REQUEST = os.path.join(RUN_DIR, "setup-request.json")
+SETUP_ERROR = os.path.join(RUN_DIR, "setup-error")
+SETUP_CODE = os.path.join(RUN_DIR, "setup-code")
+SETUP_DEFAULTS = os.path.join(RUN_DIR, "setup-defaults.json")
 
 
 def log(msg):
@@ -450,6 +458,67 @@ def run_setup_wizard(s):
     return False
 
 
+def has_setup_data(s):
+    return bool(s["user"] and s["email"] and s["password"])
+
+
+def enable_setup_page(s):
+    """Eigene Einrichtungsseite einschalten: nur ohne Einrichtung, ohne Vorgaben und mit SQLite.
+
+    Die Seite (PHP, läuft als www-data) legt ihre Angaben in RUN_DIR ab; der Nebenprozess (root)
+    verarbeitet sie. Der Code ist nur für Aufrufe von außerhalb des Heimnetzes nötig.
+    """
+    shutil.rmtree(RUN_DIR, ignore_errors=True)
+    if os.path.isfile(CONFIG) or has_setup_data(s) or s["dbtype"] != "sqlite":
+        return False
+    u = www()
+    os.makedirs(RUN_DIR, mode=0o750)
+    os.chown(RUN_DIR, u.pw_uid, u.pw_gid)
+    code = f"{int.from_bytes(os.urandom(4), 'big') % 1000000:06d}"
+    defaults = {"lang": ENV.get("WT_LANG", ""), "tree_title": ENV.get("WT_TREE_TITLE", "")}
+    for path, content in ((SETUP_CODE, code), (SETUP_DEFAULTS, json.dumps(defaults, ensure_ascii=False)), (SETUP_PAGE, "")):
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
+        os.chmod(path, 0o640)
+        os.chown(path, 0, u.pw_gid)
+    log("Einrichtung im Browser: webtrees aufrufen und die kurze Seite ausfüllen")
+    log(f"Einrichtungscode (nur nötig, wenn der Aufruf nicht aus dem Heimnetz kommt): {code}")
+    return True
+
+
+def await_setup_page(s):
+    """Auf die Angaben der Einrichtungsseite warten und webtrees damit einrichten.
+
+    Gibt die Einstellungen mit den Angaben zurück (Stammbaumname, privat, Sprache gelten auch für
+    die Ersteinrichtung). Bei einem Fehler bekommt die Seite eine Meldung und zeigt das Formular erneut.
+    """
+    while not os.path.isfile(CONFIG):
+        if not os.path.isfile(SETUP_REQUEST):
+            time.sleep(1)
+            continue
+        try:
+            with open(SETUP_REQUEST, encoding="utf-8") as f:
+                req = json.load(f)
+        except (OSError, ValueError):
+            time.sleep(1)  # die Seite schreibt noch
+            continue
+        s2 = dict(s)
+        for key in ("user", "name", "email", "password", "tree_title", "lang"):
+            if req.get(key):
+                s2[key] = str(req[key])
+        s2["private"] = bool(req.get("private", True))
+        if run_setup_wizard(s2):
+            os.remove(SETUP_REQUEST)
+            shutil.rmtree(RUN_DIR, ignore_errors=True)
+            s2["password"] = ""
+            return s2
+        with open(SETUP_ERROR, "w", encoding="utf-8") as f:
+            f.write("webtrees hat die Einrichtung abgelehnt – Details im Protokoll des Containers.")
+        os.chmod(SETUP_ERROR, 0o644)
+        os.remove(SETUP_REQUEST)
+    return s
+
+
 def forget_password():
     """Passwort aus setup.json löschen; die Datei behält ihren Besitzer (Synology-Paketnutzer)."""
     f = load_setup_file()
@@ -491,6 +560,8 @@ def first_run(s, tz):
         return
     if tz:
         wt("site-setting", "TIMEZONE", tz, check=False)
+    # Sprache für Besucher und neue Konten; der Assistent setzt sie nur für den Administrator.
+    wt("site-setting", "LANGUAGE", s["lang"], check=False)
     if not trees(s):
         wt("tree", s["tree"], "--create", f"--title={s['tree_title']}")
         wt("site-setting", "DEFAULT_GEDCOM", s["tree"], check=False)
@@ -666,10 +737,13 @@ def helper(s, tz):
         log("WARNUNG: Apache antwortet nicht — keine Einrichtung, keine Sicherung")
         return
     if not os.path.isfile(CONFIG):
-        if not (s["user"] and s["email"] and s["password"]):
+        if has_setup_data(s):
+            if not run_setup_wizard(s):
+                return
+        elif os.path.isfile(SETUP_PAGE):
+            s = await_setup_page(s)
+        else:
             log("Keine Einrichtungsdaten — bitte webtrees im Browser einrichten")
-        elif not run_setup_wizard(s):
-            return
     # Warten, bis webtrees eingerichtet ist (automatisch oder von Hand im Browser).
     while not os.path.isfile(CONFIG):
         time.sleep(10)
@@ -705,6 +779,7 @@ def main():
     ensure_writable()
     apply_config_env()
     os.makedirs(BACKUP_DIR, exist_ok=True) if backup_target_ok() else None
+    enable_setup_page(s)
 
     # Nebenprozess in eigener Sitzung. Apache schickt beim Beenden SIGTERM an seine
     # Prozessgruppe; der Nebenprozess ignoriert es, beim Stoppen des Containers endet er ohnehin.

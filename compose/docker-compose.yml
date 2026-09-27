@@ -1,10 +1,10 @@
 # nas4webtrees — das originale webtrees mit api4webtrees für wtAnd, wtWin und wtTux.
-# Für TrueNAS SCALE, UGREEN, TerraMaster, Asustor (Portainer), Unraid (Compose), QNAP
-# (Container Station), Raspberry Pi und jeden Linux-Server mit Docker.
+# Für TrueNAS, UGREEN, TerraMaster, Asustor (Portainer), Unraid (Compose), QNAP (Container Station),
+# Raspberry Pi und jeden Linux-Server mit Docker.
 #
-# Anpassen: die beiden Pfade links vom Doppelpunkt, den Port und die Angaben unter environment.
-# Ohne WT_USER/WT_EMAIL/WT_PASS zeigt webtrees beim ersten Aufruf seinen eigenen
-# Einrichtungsassistenten — dort „SQLite“ wählen, dann braucht es keinen Datenbank-Server.
+# Anpassen höchstens: den Port links vom Doppelpunkt und die beiden Ordner links vom Doppelpunkt.
+# Danach webtrees im Browser aufrufen (http://<NAS>:8095) und die kurze Einrichtungsseite ausfüllen:
+# Name des Stammbaums, dein Konto, fertig. Keine Datenbank, kein Passwort in dieser Datei.
 services:
   webtrees:
     image: ghcr.io/thobgg/nas4webtrees:latest
@@ -17,21 +17,10 @@ services:
       - ./backup:/backup            # nächtliche Sicherung: GEDCOM, Datenbank, Fotos; import/
     environment:
       TZ: Europe/Berlin
-      WT_LANG: de
-      WT_TREE_TITLE: Mein Stammbaum
-      # Automatische Einrichtung beim ersten Start (danach ohne Wirkung):
-      WT_USER: admin
-      WT_NAME: Mein Name
-      WT_EMAIL: ich@example.org
-      WT_PASS_FILE: /run/secrets/webtrees_admin
       # Auf Unraid u. ä.: Besitzer der Dateien
       # PUID: "99"
       # PGID: "100"
-    secrets:
-      - webtrees_admin
-
-# Das erste Admin-Passwort als Datei statt als Umgebungsvariable — die bliebe sonst dauerhaft
-# in der Container-Konfiguration lesbar. Datei anlegen, eine Zeile, danach darf sie weg.
-secrets:
-  webtrees_admin:
-    file: ./webtrees_admin_password.txt
+      # Für Profis: Einrichtung ohne Browser beim ersten Start (siehe README, „Settings“), z. B.
+      # WT_USER: admin
+      # WT_EMAIL: ich@example.org
+      # WT_PASS_FILE: /run/secrets/webtrees_admin

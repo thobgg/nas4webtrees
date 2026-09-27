@@ -94,6 +94,26 @@ jobs:
           test -s b/gedcom/tree1.ged || { echo "::error::GEDCOM fehlt"; exit 1; }
           curl -fsS -o /dev/null http://localhost:8095/public/css/webtrees.min.css
 
+      - name: Rauchtest Einrichtungsseite
+        # Ohne Vorgaben: die eigene Einrichtungsseite ausfüllen wie ein Kunde im Browser.
+        run: |
+          img="ghcr.io/${{ github.repository_owner }}/nas4webtrees:${{ needs.image.outputs.tag }}"
+          mkdir -p w2 b2
+          docker run -d --name seite -p 8096:80 -v "$PWD/w2:/webtrees" -v "$PWD/b2:/backup" "$img"
+          for i in $(seq 1 60); do
+            curl -fsS http://localhost:8096/ 2>/dev/null | grep -q 'name="tree_title"' && break
+            sleep 3
+          done
+          curl -fsS http://localhost:8096/ | grep -q 'name="tree_title"' || { docker logs seite; echo "::error::Einrichtungsseite fehlt"; exit 1; }
+          curl -fsS -o /dev/null -d "lang=de&tree_title=Rauchtest&user=admin&email=a%40example.org&password=rauchtest-passwort&password2=rauchtest-passwort&private=on" http://localhost:8096/
+          for i in $(seq 1 60); do
+            docker logs seite 2>&1 | grep -q "Sicherung:" && break
+            sleep 5
+          done
+          docker logs seite 2>&1 | grep "\[nas4webtrees\]"
+          docker logs seite 2>&1 | grep -q "Einrichtung: Konto admin" || { echo "::error::Einrichtung über die Seite gescheitert"; exit 1; }
+          docker logs seite 2>&1 | grep -q "Rauchtest" || { echo "::error::Stammbaumname nicht übernommen"; exit 1; }
+
   release:
     # Synology-Paket bauen, Release anlegen, Paketquelle aktualisieren — nur bei Push/Hand-Start.
     needs: [image, smoke]
