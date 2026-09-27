@@ -35,6 +35,8 @@ Das originale, unveränderte [webtrees](https://webtrees.net/) für NAS und Heim
 
 ## Synology in Kürze
 
+Ausführlich mit Bildern: **[Anleitung für Synology](docs/synology/anleitung.de.md)**.
+
 1. **Container Manager** im Paket-Zentrum installieren (einmalig).
 2. `nas4webtrees-….spk` unter [Releases](https://github.com/thobgg/nas4webtrees/releases) herunterladen.
 3. Paket-Zentrum → *Manuelle Installation* → Datei wählen → Hinweis auf Drittanbieter bestätigen → Assistent

@@ -34,6 +34,8 @@ connect right away.
 
 ## Synology in short
 
+Step by step with screenshots (German): **[Synology guide](docs/synology/anleitung.de.md)**.
+
 1. Install **Container Manager** from Package Center (once).
 2. Download `nas4webtrees-….spk` from [Releases](https://github.com/thobgg/nas4webtrees/releases).
 3. Package Center → *Manual Install* → choose the file → confirm the third-party notice → fill in the wizard
