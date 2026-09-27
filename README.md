@@ -85,8 +85,10 @@ Reverse Proxy*), HTTPS outside, `http://localhost:8095` inside. The image honour
 
 ## Connecting the apps
 
-Sign in to webtrees, open the menu entry **App** and follow the two steps there. Details:
-[api4webtrees](https://github.com/thobgg/api4webtrees#readme).
+Sign in to webtrees and open the page **App** (on Synology: main menu → *nas4webtrees – Apps verbinden*). Nothing to
+type: install wtWin (Windows) or wtTux (Linux), start it and click **Connect with wtWin** in the browser – the program
+takes over the connection and asks once. On the phone, scan the QR code with wtAnd installed. Needs wtWin/wtTux 1.21
+or later. Details: [api4webtrees](https://github.com/thobgg/api4webtrees#readme).
 
 ## Not an official webtrees project
 

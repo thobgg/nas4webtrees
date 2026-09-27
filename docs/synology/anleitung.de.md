@@ -92,14 +92,20 @@ Wer schon mit einem Programm wie Ahnenblatt, Gramps, Legacy oder MyHeritage arbe
 ## 7. Die Apps verbinden
 
 Im Hauptmenü der Synology führt **nas4webtrees – Apps verbinden** direkt zur Seite „App“ in
-webtrees. Dort steht für jedes Gerät, was zu tun ist:
+webtrees (nach dem Anmelden auch über den blauen Hinweis oben). Adresse und Passwort musst du in den
+Apps nicht eintippen:
 
-- **Handy (wtAnd):** App herunterladen, dann den QR-Code „Verbinden“ mit der Handy-Kamera scannen.
-- **Windows (wtWin) und Linux (wtTux):** Programm herunterladen und installieren, die angezeigte
-  Adresse kopieren, in das Programm einfügen und mit Benutzername und Passwort anmelden.
+- **Windows-PC (wtWin):**
+  1. **wtWin für Windows herunterladen**, die Datei doppelt anklicken und installieren. Warnt Windows
+     („Der Computer wurde durch Windows geschützt“): **Weitere Informationen** → **Trotzdem ausführen**.
+  2. wtWin starten, zurück in den Browser und auf **Mit wtWin verbinden** klicken.
+  3. wtWin fragt einmal „Mit diesem Server verbinden?“ → **Verbinden**. Fertig, dein Stammbaum ist offen.
+- **Android-Handy (wtAnd):** App herunterladen, dann den QR-Code unter „Mit deinem Konto verbinden“
+  mit der Handy-Kamera scannen (oder die Seite am Handy öffnen und auf **Jetzt verbinden** tippen).
+- **Linux-PC (wtTux):** unter „Auch für Linux“, genauso wie bei Windows.
 
-Die Apps brauchen dafür Version 1.19 oder neuer. Im Heimnetz verbinden sie sich auch ohne
-Verschlüsselung; von unterwegs geht das erst mit Abschnitt 10.
+Dafür braucht es wtWin/wtTux ab 1.21 und wtAnd ab 1.19. Im Heimnetz verbinden sich die Apps auch
+ohne Verschlüsselung; von unterwegs geht das erst mit Abschnitt 10.
 
 ## 8. Deine Sicherung
 
