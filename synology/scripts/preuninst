@@ -1,4 +1,5 @@
 #!/bin/sh
+# Nur Protokoll: Container, Image und docker/nas4webtrees entfernt der Worker.
 . "$(dirname "$0")/common"
 log "preuninst"
 exit 0

@@ -1,8 +1,9 @@
 #!/bin/sh
+# Nur Protokoll. Die Sicherung unter <Freigabe>/webtrees-sicherung bleibt immer stehen.
 . "$(dirname "$0")/common"
 if [ "${SYNOPKG_PKG_STATUS}" = "UPGRADE" ]; then
-    log "postuninst (Update) — Programm und Daten unter ${DOCKER_DIR} bleiben"
+    log "postuninst (Update) – Programm und Daten unter ${DOCKER_DIR} bleiben"
 else
-    log "postuninst — Container, Image und ${DOCKER_DIR} entfernt der Worker; die Sicherung unter /<Freigabe>/${BACKUP_SUBDIR} bleibt"
+    log "postuninst – Container, Image und ${DOCKER_DIR} entfernt der Worker; die Sicherung unter <Freigabe>/${BACKUP_SUBDIR} bleibt"
 fi
 exit 0

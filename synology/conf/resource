@@ -4,16 +4,16 @@
       {
         "service": "nas4webtrees",
         "image": "nas4webtrees-spk",
-        "tag": "{{PKG_VERSION}}",
-        "container_name": "syno-nas4webtrees",
+        "tag": "__PKG_VERSION__",
+        "container_name": "__CONTAINER__",
         "environment": [
           {
             "env_var": "BACKUP_SUBDIR",
-            "env_value": "webtrees-sicherung"
+            "env_value": "__BACKUP_SUBDIR__"
           },
           {
             "env_var": "NAS4WEBTREES_PKG",
-            "env_value": "synology-{{PKG_VERSION}}"
+            "env_value": "synology-__PKG_VERSION__"
           }
         ],
         "volumes": [

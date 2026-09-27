@@ -1,23 +1,8 @@
 #!/bin/sh
+# Vor Installation und Update (auch beim Update läuft das preinst der neuen Fassung): Eingaben aus
+# dem Assistenten prüfen. Ein Fehler hier bricht ab, bevor irgendetwas verändert ist.
 . "$(dirname "$0")/common"
 log "preinst"
-if [ "${SYNOPKG_PKG_STATUS}" = "INSTALL" ]; then
-    lan="${wizard_port:-${DEFAULT_LAN_PORT}}"
-    port_valid "${lan}" || die "Ungültiger Port: ${lan} (1024 bis 65535)"
-    port_in_use "${lan}" && die "Port ${lan} ist schon belegt. Bitte einen anderen wählen."
-    [ -n "${wizard_backup_share:-}" ] || die "Bitte eine Freigabe für die Sicherung angeben."
-    [ -d "${VOL_BASE}/${wizard_backup_share}" ] || die "Freigabe nicht gefunden: ${VOL_BASE}/${wizard_backup_share} (Name wie in der Systemsteuerung, Groß-/Kleinschreibung beachten)"
-
-    # Ein Administratorkonto braucht es nur, wenn wirklich neu eingerichtet wird — nicht über
-    # erhaltenen Daten und nicht bei einer Wiederherstellung aus der Sicherung.
-    if has_live_data; then
-        log "Vorhandene Datenbank unter ${DOCKER_DIR}/data — kein neues Konto nötig"
-    elif [ "${wizard_restore:-true}" = "true" ] && has_backup "${wizard_backup_share}"; then
-        log "Sicherung unter ${VOL_BASE}/${wizard_backup_share}/${BACKUP_SUBDIR} gefunden — wird wiederhergestellt"
-    else
-        [ -n "${wizard_admin_user:-}" ] || die "Bitte einen Benutzernamen für den Administrator angeben."
-        case "${wizard_admin_email:-}" in *?@?*.?*) ;; *) die "Bitte eine gültige E-Mail-Adresse angeben." ;; esac
-        [ "${#wizard_admin_pw}" -ge 8 ] || die "Das Passwort braucht mindestens 8 Zeichen."
-    fi
-fi
+check_port_and_share
+[ "${SYNOPKG_PKG_STATUS}" = "INSTALL" ] && check_admin_account
 exit 0

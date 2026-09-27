@@ -1,4 +1,5 @@
 #!/bin/sh
+# Nur Protokoll: Programm und Daten unter docker/nas4webtrees lässt der Worker beim Update stehen.
 . "$(dirname "$0")/common"
-log "preupgrade von ${SYNOPKG_OLD_PKGVER} auf ${SYNOPKG_PKGVER} — Programm und Daten unter ${DOCKER_DIR} bleiben (Worker)"
+log "preupgrade von ${SYNOPKG_OLD_PKGVER} auf ${SYNOPKG_PKGVER}"
 exit 0
