@@ -1,0 +1,66 @@
+name: big-bear-nas4webtrees
+services:
+  app:
+    image: ghcr.io/thobgg/nas4webtrees:2.2.6-7
+    restart: unless-stopped
+    environment:
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
+    ports:
+      - target: 80
+        published: "8195"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /DATA/AppData/nas4webtrees/webtrees
+        target: /webtrees
+      - type: bind
+        source: /DATA/AppData/nas4webtrees/backup
+        target: /backup
+    x-casaos:
+      envs:
+        - container: PUID
+          description:
+            en_US: 'User ID that owns the files'
+        - container: PGID
+          description:
+            en_US: 'Group ID that owns the files'
+        - container: TZ
+          description:
+            en_US: 'Time zone (for the nightly backup)'
+      volumes:
+        - container: /webtrees
+          description:
+            en_US: 'webtrees program and data (webtrees updates itself here)'
+        - container: /backup
+          description:
+            en_US: 'Nightly backup: GEDCOM per family tree, database, media; import folder'
+      ports:
+        - container: "80"
+          description:
+            en_US: 'Web interface'
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  id: com.bigbeartechworld.nas4webtrees
+  main: app
+  description:
+    en_US: 'The original, unmodified webtrees – online genealogy for your family tree – with SQLite, so no database server is needed. After installing, open the app and fill in the short setup page (name of the family tree, your account). api4webtrees is preinstalled: the wtWin (Windows), wtTux (Linux) and wtAnd (Android) apps connect with one click from the page “App” in webtrees. Every night each family tree is backed up as a GEDCOM file, together with the database and photos. webtrees updates itself from its own control panel. Community project, not an official part of webtrees.'
+    de_DE: 'Das originale, unveränderte webtrees – Stammbaum im Browser – mit SQLite, ganz ohne Datenbank-Server. Nach der Installation die App öffnen und die kurze Einrichtungsseite ausfüllen (Name des Stammbaums, dein Konto). api4webtrees ist vorinstalliert: Die Apps wtWin (Windows), wtTux (Linux) und wtAnd (Android) verbinden sich auf der Seite „App“ in webtrees mit einem Klick. Jede Nacht wird jeder Stammbaum als GEDCOM-Datei gesichert, dazu Datenbank und Fotos. webtrees aktualisiert sich über seine eigene Verwaltung. Gemeinschaftsprojekt, kein offizieller Teil von webtrees.'
+  tagline:
+    en_US: 'Your family tree online – the original webtrees, ready to use, with apps for PC and phone'
+    de_DE: 'Dein Stammbaum im Browser – das originale webtrees, sofort bereit, mit Apps für PC und Handy'
+  developer: webtrees / nas4webtrees
+  author: thobgg
+  icon: https://cdn.jsdelivr.net/gh/thobgg/nas4webtrees@main/docs/icon-256.png
+  thumbnail: https://cdn.jsdelivr.net/gh/thobgg/nas4webtrees@main/docs/icon-256.png
+  title:
+    en_US: nas4webtrees
+  category: Productivity
+  port_map: "8195"
+  scheme: http
+  index: /
+  version: "2.2.6-7"

@@ -30,6 +30,8 @@ connect right away.
 | Asustor (ADM) | Portainer from App Central → Stacks, paste the compose file |
 | Unraid | Template [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) |
 | QNAP | Container Station → Applications → Create — [guide (German)](docs/qnap/anleitung.de.md) |
+| CasaOS / ZimaOS | App Store (BigBear store) – pending, or paste the compose file |
+| Umbrel | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` |
 | Raspberry Pi, any Linux server | `docker compose up -d` |
 
 ## Synology in short
