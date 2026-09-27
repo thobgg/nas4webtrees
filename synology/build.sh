@@ -3,7 +3,7 @@
 # Ein SPK ist ein tar aus: INFO, PACKAGE_ICON*.PNG, package.tgz, scripts/, conf/, WIZARD_UIFILES/.
 # Kein spksrc, kein pkgscripts — für ein noarch-Paket ohne Kompilat reicht tar.
 #
-#   synology/build.sh               → Build-Nummer aus BUILD; das Paket zieht das fertige Image
+#   synology/build.sh               → Build-Nummer = Zahl der Commits; das Paket zieht das fertige Image
 #                                     ghcr.io/thobgg/nas4webtrees:<WEBTREES>-<REVISION>
 #   synology/build.sh 3             → Build-Nummer 3
 #   synology/build.sh --standalone  → das Paket baut das ganze Image selbst auf der NAS
@@ -26,7 +26,10 @@ IMAGE_TAG="${WT_VER}-${REV}"
 
 STANDALONE=0
 if [ "${1:-}" = "--standalone" ]; then STANDALONE=1; shift; fi
-BUILD="${1:-$(tr -d '[:space:]' < "${HERE}/BUILD")}"
+# Build-Nummer aus der Git-Historie: steigt mit jedem Commit, lokal wie in GitHub Actions gleich
+# (dort mit vollständiger Historie auschecken). Ohne Historie lieber abbrechen als raten.
+BUILD="${1:-$(git -C "${ROOT}" rev-list --count HEAD 2>/dev/null || echo 0)}"
+[ "${BUILD}" -gt 0 ] || { echo "✗ Keine Git-Historie — Build-Nummer unbekannt"; exit 1; }
 VERSION="${WT_VER}-${BUILD}"
 DIST="${ROOT}/dist"
 STAGE="${DIST}/stage"

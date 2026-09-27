@@ -1,26 +1,35 @@
 name: image
 
-# Baut ghcr.io/thobgg/nas4webtrees für amd64, arm64 und armv7.
-# - bei jedem Push auf main (Tags <WEBTREES>-<REVISION>, <WEBTREES>, latest)
-# - wöchentlich neu, damit Sicherheitsupdates von PHP, Apache und Debian ankommen
-# - bei Pull Requests nur bauen, nicht veröffentlichen
+# Baut ghcr.io/thobgg/nas4webtrees für amd64, arm64 und armv7, prüft es, baut das Synology-Paket,
+# legt das Release an und aktualisiert die Paketquelle für das Paket-Zentrum (GitHub Pages).
+# - Push auf main mit Änderungen an Image, Paket oder Versionen: alles
+# - wöchentlich: nur Image neu bauen und prüfen (Sicherheitsupdates von PHP, Apache, Debian)
+# - Pull Request: nur bauen
 on:
   push:
     branches: [main]
-    paths: [image/**, VERSIONS, .github/workflows/image.yml]
+    paths: [image/**, synology/**, VERSIONS, .github/**]
   pull_request:
-    paths: [image/**, VERSIONS, .github/workflows/image.yml]
+    paths: [image/**, synology/**, VERSIONS, .github/**]
   schedule:
     - cron: "17 4 * * 1"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: image-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  build:
+  image:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.v.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
 
@@ -62,3 +71,80 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/nas4webtrees:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  smoke:
+    # Das veröffentlichte Image so starten, wie ein Kunde es tut: Einrichtung, Baum, Sicherung.
+    needs: image
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rauchtest
+        run: |
+          img="ghcr.io/${{ github.repository_owner }}/nas4webtrees:${{ needs.image.outputs.tag }}"
+          mkdir -p w b
+          docker run -d --name t -p 8095:80 -e WT_USER=admin -e WT_EMAIL=a@example.org \
+            -e WT_PASS=rauchtest-passwort -v "$PWD/w:/webtrees" -v "$PWD/b:/backup" "$img"
+          for i in $(seq 1 60); do
+            docker logs t 2>&1 | grep -q "Sicherung:" && break
+            sleep 5
+          done
+          docker logs t 2>&1 | grep "\[nas4webtrees\]"
+          docker logs t 2>&1 | grep -q "Sicherung:" || { echo "::error::keine Sicherung – Einrichtung gescheitert"; exit 1; }
+          docker logs t 2>&1 | grep -q "nur für angemeldete Benutzer" || { echo "::error::Baum nicht privat"; exit 1; }
+          test -s b/gedcom/tree1.ged || { echo "::error::GEDCOM fehlt"; exit 1; }
+          curl -fsS -o /dev/null http://localhost:8095/public/css/webtrees.min.css
+
+  release:
+    # Synology-Paket bauen, Release anlegen, Paketquelle aktualisieren — nur bei Push/Hand-Start.
+    needs: [image, smoke]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Build-Nummer = Zahl der Commits
+
+      - name: Werkzeuge
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq inkscape >/dev/null
+
+      - name: Synology-Paket bauen
+        id: spk
+        run: |
+          synology/build.sh
+          version="$(sed -n 's/^version="\(.*\)"/\1/p' dist/pkg/INFO)"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "file=dist/nas4webtrees-${version}.spk" >> "$GITHUB_OUTPUT"
+
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="${{ steps.spk.outputs.version }}"
+          if gh release view "v${v}" >/dev/null 2>&1; then
+            echo "Release v${v} gibt es schon"
+          else
+            sed -e "s/@VERSION@/${v}/g" -e "s/@IMAGE@/${{ needs.image.outputs.tag }}/g" \
+              -e "s/@API@/$(sed -n 's/^API4WEBTREES=//p' VERSIONS)/g" \
+              -e "s/@WEBTREES@/$(sed -n 's/^WEBTREES=//p' VERSIONS)/g" \
+              .github/release-notes.md > notes.md
+            gh release create "v${v}" "${{ steps.spk.outputs.file }}" --target "${GITHUB_SHA}" \
+              --title "nas4webtrees ${v} – Synology" --notes-file notes.md --latest
+          fi
+
+      - name: Paketquelle erzeugen
+        run: |
+          v="${{ steps.spk.outputs.version }}"
+          site="https://${{ github.repository_owner }}.github.io/nas4webtrees"
+          python3 .github/scripts/package_source.py "${{ steps.spk.outputs.file }}" dist/pkg \
+            "https://github.com/${{ github.repository }}/releases/download/v${v}/nas4webtrees-${v}.spk" \
+            site "${site}"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
+        id: pages
