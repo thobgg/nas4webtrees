@@ -62,9 +62,11 @@ Die Installation dauert einige Minuten. Danach steht im Paket-Zentrum **„Wird 
 
 webtrees öffnest du auf einem dieser Wege:
 
-- im **Hauptmenü** der Synology (oben links) über **nas4webtrees**,
-- im Paket-Zentrum über **Öffnen** oder den Link unter „URL“,
+- im **Hauptmenü** der Synology (oben links) über **nas4webtrees** – daneben steht **nas4webtrees – Apps verbinden** (Abschnitt 7),
+- im Paket-Zentrum über **Öffnen**,
 - direkt im Browser unter `http://<Adresse deiner Synology>:8095`.
+
+![Hauptmenü der Synology mit dem Eintrag nas4webtrees](img/07-hauptmenue.png)
 
 Melde dich mit dem Konto aus Seite 1 an.
 
