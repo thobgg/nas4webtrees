@@ -63,11 +63,12 @@ write_setup() {
     out="${TARGET}/conf/setup.json"
     lang="de"; [ "${SYNOPKG_DSM_LANGUAGE:-ger}" = "ger" ] || lang="en-US"
     restore="true"; [ "${wizard_restore:-true}" = "true" ] || restore="false"
+    private="true"; [ "${wizard_private:-true}" = "true" ] || private="false"
     mkdir -p "${TARGET}/conf"; umask 077
-    printf '{"user":"%s","name":"%s","email":"%s","password":"%s","lang":"%s","tree":"stammbaum","tree_title":"%s","restore":%s}\n' \
+    printf '{"user":"%s","name":"%s","email":"%s","password":"%s","lang":"%s","tree":"stammbaum","tree_title":"%s","restore":%s,"private":%s}\n' \
         "$(json_escape "${wizard_admin_user}")" "$(json_escape "${wizard_admin_name:-${wizard_admin_user}}")" \
         "$(json_escape "${wizard_admin_email}")" "$(json_escape "${wizard_admin_pw:-}")" "${lang}" \
-        "$(json_escape "${wizard_tree_title:-Mein Stammbaum}")" "${restore}" > "${out}"
+        "$(json_escape "${wizard_tree_title:-Mein Stammbaum}")" "${restore}" "${private}" > "${out}"
     umask 022
 }
 

@@ -25,6 +25,8 @@ T_PW_HINT="Mindestens 8 Zeichen. Dieses Konto gilt nur für webtrees, nicht für
 T_REQ="Pflichtfeld"
 T_EMAIL_ERR="Bitte eine E-Mail-Adresse angeben"
 T_PW_ERR="Mindestens 8 Zeichen"
+T_PRIVATE="Stammbaum nur für angemeldete Benutzer"
+T_PRIVATE_HINT="Empfohlen: Besucher sehen nichts, Konten für Verwandte legst du in webtrees an. Später jederzeit änderbar."
 T_P2="Erreichbarkeit und Sicherung"
 T_P2_INTRO="webtrees ist danach im Heimnetz unter <b>http://&lt;NAS&gt;:&lt;Port&gt;</b> erreichbar."
 T_PORT="Port"
@@ -51,6 +53,8 @@ T_PW_HINT="At least 8 characters. This account is for webtrees only, not for DSM
 T_REQ="Required"
 T_EMAIL_ERR="Please enter an email address"
 T_PW_ERR="At least 8 characters"
+T_PRIVATE="Family tree for signed-in users only"
+T_PRIVATE_HINT="Recommended: visitors see nothing; you create accounts for relatives in webtrees. Can be changed any time."
 T_P2="Access and backup"
 T_P2_INTRO="webtrees is then reachable on your LAN at <b>http://&lt;NAS&gt;:&lt;port&gt;</b>."
 T_PORT="Port"
@@ -105,7 +109,9 @@ cat > "${SYNOPKG_TEMP_LOGFILE}" <<EOT
     "validator":{"allowBlank":true,"regex":{"expr":"/^[^@ ]+@[^@ ]+\\\\.[^@ ]+$/","errorText":"${T_EMAIL_ERR}"}}}]},
   {"desc":"${T_PW_HINT}"},
   {"type":"password","subitems":[{"key":"wizard_admin_pw","desc":"${T_PW}",
-    "validator":{"allowBlank":true,"minLength":8,"minLengthText":"${T_PW_ERR}"}}]}
+    "validator":{"allowBlank":true,"minLength":8,"minLengthText":"${T_PW_ERR}"}}]},
+  {"type":"multiselect","subitems":[{"key":"wizard_private","desc":"${T_PRIVATE}","defaultValue":true}]},
+  {"desc":"${T_PRIVATE_HINT}"}
  ]},
  {"step_title":"${T_P2}","invalid_next_disabled":true,"items":[
   {"desc":"${T_P2_INTRO}"},

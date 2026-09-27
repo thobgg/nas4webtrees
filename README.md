@@ -63,6 +63,7 @@ appears instead — choose *SQLite* there.
 | `WT_LANG` | `en-US` | Language for setup (`de`, `nl`, `fr`, …) |
 | `WT_TREE`, `WT_TREE_TITLE` | `tree1`, `My family tree` | First family tree |
 | `WT_RESTORE` | `true` | Restore from `/backup` on a fresh install |
+| `WT_PRIVATE` | `true` | New family tree only for signed-in users, no self-registration (the administrator creates accounts). `false` keeps the webtrees default: public tree, living people hidden |
 | `TZ` | – | Time zone, e.g. `Europe/Berlin` |
 | `PUID`, `PGID` | 33 | Owner of the files (Unraid: 99/100) |
 | `WRITE_GID` | – | Group that may write on ACL-managed shares; used only if the files are not writable otherwise |

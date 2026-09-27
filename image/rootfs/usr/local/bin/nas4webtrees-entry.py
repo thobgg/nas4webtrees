@@ -101,6 +101,8 @@ def settings():
         "tree": ENV.get("WT_TREE") or f.get("tree") or "tree1",
         "tree_title": ENV.get("WT_TREE_TITLE") or f.get("tree_title") or "My family tree",
         "restore": truthy(ENV.get("WT_RESTORE"), f.get("restore", True)),
+        # Familien-Stammbaum: nur für angemeldete Benutzer, Konten legt der Administrator an.
+        "private": truthy(ENV.get("WT_PRIVATE"), f.get("private", True)),
         "dbtype": ENV.get("DB_TYPE", "sqlite"),
         "dbhost": ENV.get("DB_HOST", ""),
         "dbport": ENV.get("DB_PORT", ""),
@@ -464,6 +466,26 @@ def forget_password():
     log("Startpasswort aus setup.json entfernt")
 
 
+def make_private(s, name):
+    """„Anmeldung erforderlich“ für diesen Baum und kein Konto-Beantragen für Besucher.
+
+    webtrees 2.2.6 hält die Einstellung in der Spalte gedcom.private; der alte Weg über
+    setPreference('REQUIRE_AUTHENTICATION') ist veraltet und änderte alle Bäume auf einmal.
+    Wer sich registriert, tut das für einen Baum — bei einem privaten Baum geht das ohnehin nicht,
+    der Administrator legt die Konten an (Verwaltung → Benutzer).
+    """
+    if s["dbtype"] == "sqlite":
+        u = www()
+        code = ("import sqlite3,sys; c=sqlite3.connect(sys.argv[1], timeout=30); "
+                f"c.execute('UPDATE {TBLPFX}gedcom SET private=1 WHERE gedcom_name=?', (sys.argv[2],)); c.commit()")
+        subprocess.run(["setpriv", f"--reuid={u.pw_uid}", f"--regid={u.pw_gid}", "--clear-groups",
+                        "python3", "-c", code, db_file(s), name], check=True)
+    else:
+        wt("tree-setting", name, "REQUIRE_AUTHENTICATION", "1", check=False)
+    wt("site-setting", "USE_REGISTRATION_MODULE", "0", check=False)
+    log(f"Stammbaum {name}: nur für angemeldete Benutzer, kein Konto-Beantragen")
+
+
 def first_run(s, tz):
     if state_get("initialized"):
         return
@@ -473,6 +495,8 @@ def first_run(s, tz):
         wt("tree", s["tree"], "--create", f"--title={s['tree_title']}")
         wt("site-setting", "DEFAULT_GEDCOM", s["tree"], check=False)
         log(f"Stammbaum „{s['tree_title']}“ ({s['tree']}) angelegt")
+        if s["private"]:
+            make_private(s, s["tree"])
     state_set("initialized", datetime.datetime.now().isoformat(timespec="seconds"))
 
 

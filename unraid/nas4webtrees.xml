@@ -22,5 +22,6 @@
   <Config Name="Admin user" Target="WT_USER" Default="" Description="Optional: create this administrator on first start. Leave empty to use the webtrees setup wizard in the browser." Type="Variable" Display="always" Required="false" Mask="false"/>
   <Config Name="Admin email" Target="WT_EMAIL" Default="" Description="Optional, with Admin user" Type="Variable" Display="always" Required="false" Mask="false"/>
   <Config Name="Admin password" Target="WT_PASS" Default="" Description="Optional, with Admin user; only used on first start" Type="Variable" Display="always" Required="false" Mask="true"/>
+  <Config Name="Private tree" Target="WT_PRIVATE" Default="true" Description="New family tree only for signed-in users (true) or public like webtrees default (false)" Type="Variable" Display="always" Required="false" Mask="false">true</Config>
   <Config Name="Language" Target="WT_LANG" Default="en-US" Description="Language for setup, e.g. de, en-US, nl, fr" Type="Variable" Display="advanced" Required="false" Mask="false">en-US</Config>
 </Container>
