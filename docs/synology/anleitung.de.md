@@ -21,6 +21,9 @@ Installieren.* Das Paket-Zentrum installiert ihn nicht von selbst mit.
 Auf der Seite [Releases](https://github.com/thobgg/nas4webtrees/releases/latest) die Datei
 `nas4webtrees-….spk` herunterladen, zum Beispiel `nas4webtrees-2.2.6-6.spk`.
 
+Alternative ohne Download: die Paketquelle eintragen (siehe Abschnitt 9) und nas4webtrees im
+Paket-Zentrum unter *Community* installieren. Dann meldet das Paket-Zentrum auch alle Updates.
+
 ## 3. Installieren
 
 *Paket-Zentrum → oben rechts „Manuelle Installation“ → Durchsuchen → die .spk-Datei wählen → Weiter.*
@@ -117,9 +120,16 @@ Tipp: Nimm den Ordner in deine übliche Datensicherung auf, zum Beispiel Hyper B
 
 - **webtrees selbst** aktualisierst du wie gewohnt in webtrees unter *Verwaltung → Aktualisierung*,
   sobald webtrees eine neue Fassung meldet.
-- **Das Paket** (Umgebung und api4webtrees): neue .spk-Datei von der Release-Seite laden und über
-  *Manuelle Installation* einspielen. Stammbaum, Konten und Fotos bleiben erhalten, und webtrees wird
-  dabei nie auf eine ältere Fassung zurückgesetzt.
+- **Das Paket** (Umgebung und api4webtrees): Am bequemsten trägst du einmal die Paketquelle ein,
+  dann meldet das Paket-Zentrum neue Versionen von selbst:
+  *Paket-Zentrum → Einstellungen → Paketquellen → Hinzufügen*, Name `nas4webtrees`, Ort
+  `https://thobgg.github.io/nas4webtrees/index.json`. Updates erscheinen danach unter
+  *Installiert*, das Paket selbst auch unter *Community*.
+  Ohne Paketquelle: neue .spk-Datei von der Release-Seite laden und über *Manuelle Installation*
+  einspielen.
+
+  In beiden Fällen bleiben Stammbaum, Konten und Fotos erhalten, und webtrees wird dabei nie auf
+  eine ältere Fassung zurückgesetzt.
 
 ## 10. Von unterwegs erreichbar machen (für Fortgeschrittene)
 

@@ -66,8 +66,7 @@ code{{background:#eef;padding:.1em .3em;border-radius:3px}}img{{float:right}}</s
 <p>Paketquelle für das Synology-Paket-Zentrum. Einmal eintragen, dann meldet DSM neue Versionen von selbst:</p>
 <ol><li><b>Paket-Zentrum → Einstellungen → Paketquellen → Hinzufügen</b></li>
 <li>Name: <code>nas4webtrees</code>, Ort: <code>{e(site)}/index.json</code></li>
-<li>Unter <b>Einstellungen → Allgemein → Vertrauensebene</b> „Beliebiger Herausgeber“ wählen (das Paket ist nicht von Synology signiert).</li>
-<li>Im Paket-Zentrum unter <b>Community</b> erscheint nas4webtrees.</li></ol>
+<li>Im Paket-Zentrum unter <b>Community</b> erscheint nas4webtrees. Beim Installieren weist DSM darauf hin, dass das Paket nicht von Synology stammt – mit <b>Akzeptieren</b> geht es weiter.</li></ol>
 <p>Oder direkt herunterladen: <a href="{e(link)}">{e(os.path.basename(link))}</a> und über „Manuelle Installation“ einspielen.</p>
 <p><a href="https://github.com/thobgg/nas4webtrees">Projekt auf GitHub</a> · Gemeinschaftspaket, kein offizieller Teil von webtrees.</p>
 </body></html>
