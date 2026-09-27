@@ -46,7 +46,7 @@ bereit, mit einem klassischen Programm für Windows und Linux und einer App für
 | **UGREEN** (UGOS Pro) | Docker → Project → Create, Compose-Datei einfügen | [Anleitung](docs/ugreen/anleitung.de.md) | ⬜ noch nicht |
 | **TrueNAS** ab 25.04 | Apps → Discover → *Install via YAML* | [Anleitung](docs/truenas/anleitung.de.md) | ⬜ noch nicht |
 | **CasaOS / ZimaOS** | Compose-Datei einfügen; Aufnahme in den BigBear-App-Store beantragt | – | 🟡 Compose-Datei getestet, nicht auf dem Gerät |
-| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [Store](https://github.com/thobgg/nas4webtrees-umbrel) | ⬜ noch nicht |
+| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` (wird bei jedem Release automatisch aktualisiert) | [Store](https://github.com/thobgg/nas4webtrees-umbrel) | ⬜ noch nicht |
 | **Unraid** | Vorlage [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) | – | ⬜ noch nicht |
 | **TerraMaster** (TOS 6) | Docker Manager → Project, Compose-Datei einfügen | – | ⬜ noch nicht |
 | **Asustor** (ADM) | Portainer aus App Central → Stacks, Compose-Datei einfügen | – | ⬜ noch nicht |

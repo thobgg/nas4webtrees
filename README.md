@@ -45,7 +45,7 @@ with a classic desktop program for Windows and Linux and an app for Android.**
 | **UGREEN** (UGOS Pro) | Docker → Project → Create, paste the compose file | [German](docs/ugreen/anleitung.de.md) | ⬜ not yet |
 | **TrueNAS** 25.04+ | Apps → Discover → *Install via YAML* | [German](docs/truenas/anleitung.de.md) | ⬜ not yet |
 | **CasaOS / ZimaOS** | Paste the compose file; BigBear App Store requested | – | 🟡 compose file tested, not on the device |
-| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` | [store](https://github.com/thobgg/nas4webtrees-umbrel) | ⬜ not yet |
+| **Umbrel** | App Store → Community App Stores → `https://github.com/thobgg/nas4webtrees-umbrel` (updated automatically with every release) | [store](https://github.com/thobgg/nas4webtrees-umbrel) | ⬜ not yet |
 | **Unraid** | Template [`unraid/nas4webtrees.xml`](unraid/nas4webtrees.xml) | – | ⬜ not yet |
 | **TerraMaster** (TOS 6) | Docker Manager → Project, paste the compose file | – | ⬜ not yet |
 | **Asustor** (ADM) | Portainer from App Central → Stacks, paste the compose file | – | ⬜ not yet |
