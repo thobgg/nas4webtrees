@@ -70,6 +70,8 @@ for a setup code shown in the container log (`docker logs webtrees`). Setup with
 
 ## Synology in short
 
+📖 **[Step-by-step guide with screenshots (German)](docs/synology/anleitung.de.md)**
+
 1. Install **Container Manager** from Package Center (once).
 2. Package Center → *Settings* → *Package Sources* → *Add*: `https://thobgg.github.io/nas4webtrees/index.json`
    – or download `nas4webtrees-….spk` from [Releases](https://github.com/thobgg/nas4webtrees/releases) and use *Manual Install*.

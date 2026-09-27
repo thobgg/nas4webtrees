@@ -71,6 +71,8 @@ Seite nach einem Einrichtungscode aus dem Container-Protokoll (`docker logs webt
 
 ## Synology in Kürze
 
+📖 **[Schritt-für-Schritt-Anleitung mit Screenshots](docs/synology/anleitung.de.md)**
+
 1. **Container Manager** aus dem Paket-Zentrum installieren (einmalig).
 2. Paket-Zentrum → *Einstellungen* → *Paketquellen* → *Hinzufügen*: `https://thobgg.github.io/nas4webtrees/index.json`
    – oder `nas4webtrees-….spk` von den [Releases](https://github.com/thobgg/nas4webtrees/releases) laden und über
