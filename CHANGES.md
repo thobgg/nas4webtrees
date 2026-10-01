@@ -3,6 +3,11 @@
 Der oberste Abschnitt erscheint im Paket-Zentrum unter „Was ist neu“ und im Release auf GitHub. Leser sind
 Synology-Nutzer: schreiben, was sich auf ihrer NAS ändert (oder „keine Änderung für die Synology“).
 
+## 01.10.2026
+api4webtrees 1.12.0 für die Apps: wtWin und wtTux können jetzt Paten und Trauzeugen eintragen und die Art der
+Heirat setzen. Für die neuesten Funktionen von wtWin/wtTux (ab 1.32) bitte dieses Update einspielen. Stammbaum
+und Konten bleiben wie immer erhalten.
+
 ## 27.09.2026 (Automatik)
 Keine Änderung für die Synology – nur interne Automatik (der Umbrel-Store zieht neue Versionen jetzt selbst nach).
 
