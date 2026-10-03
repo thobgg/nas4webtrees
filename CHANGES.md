@@ -3,6 +3,11 @@
 Der oberste Abschnitt erscheint im Paket-Zentrum unter „Was ist neu“ und im Release auf GitHub. Leser sind
 Synology-Nutzer: schreiben, was sich auf ihrer NAS ändert (oder „keine Änderung für die Synology“).
 
+## 03.10.2026
+api4webtrees 1.13.0 für die Apps: wtWin, wtTux und wtMac bekommen eine Ortsverwaltung (Orte mit Karte, GOV-Kennung,
+Koordinaten, Umbenennen und Zusammenführen) und können die Startperson festlegen. Für diese Funktionen (ab 1.34) bitte
+dieses Update einspielen. Stammbaum und Konten bleiben wie immer erhalten.
+
 ## 01.10.2026
 api4webtrees 1.12.0 für die Apps: wtWin und wtTux können jetzt Paten und Trauzeugen eintragen und die Art der
 Heirat setzen. Für die neuesten Funktionen von wtWin/wtTux (ab 1.32) bitte dieses Update einspielen. Stammbaum
