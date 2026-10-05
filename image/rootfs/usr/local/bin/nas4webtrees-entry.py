@@ -404,6 +404,32 @@ def restore_from_backup(s):
     return True
 
 
+def ensure_default_user(s):
+    """Fehlt der Standard-Benutzer (user_id -1), legt webtrees die Startseite nicht an (Fremdschlüssel).
+
+    Normalerweise legt ihn die Einrichtung an; bei einer unvollständigen Einrichtung oder einer
+    beschädigten Datenbank fehlt er. Nur bei vorhandener SQLite-Datenbank mit Benutzertabelle.
+    """
+    if s["dbtype"] != "sqlite" or not os.path.isfile(db_file(s)):
+        return
+    try:
+        con = sqlite3.connect(db_file(s), timeout=30)
+        try:
+            if not con.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+                               (TBLPFX + "user",)).fetchone():
+                return
+            cur = con.execute(
+                f"INSERT OR IGNORE INTO {TBLPFX}user (user_id, user_name, real_name, email, password) "
+                "VALUES (-1, 'DEFAULT_USER', 'DEFAULT_USER', 'DEFAULT_USER', 'DEFAULT_USER')")
+            con.commit()
+            if cur.rowcount:
+                log("Standard-Benutzer (DEFAULT_USER) fehlte in der Datenbank — wieder angelegt")
+        finally:
+            con.close()
+    except sqlite3.Error as e:
+        log(f"WARNUNG: Standard-Benutzer nicht geprüft: {e}")
+
+
 def apply_config_env():
     """BASE_URL und PRETTY_URLS bei jedem Start übernehmen — nur wenn ausdrücklich gesetzt."""
     if not os.path.isfile(CONFIG):
@@ -775,6 +801,7 @@ def main():
         restore_from_backup(s)
     ensure_webtrees()
     ensure_modules()
+    ensure_default_user(s)
     fix_ownership()
     ensure_writable()
     apply_config_env()

@@ -3,6 +3,11 @@
 Der oberste Abschnitt erscheint im Paket-Zentrum unter „Was ist neu“ und im Release auf GitHub. Leser sind
 Synology-Nutzer: schreiben, was sich auf ihrer NAS ändert (oder „keine Änderung für die Synology“).
 
+## 05.10.2026
+Fehlerbehebung: Fehlte in der Datenbank der interne Standard-Benutzer, zeigte „Meine Seiten“ nach der Anmeldung den
+Fehler „FOREIGN KEY constraint failed“. Das Paket legt ihn beim Start jetzt selbst wieder an. Stammbaum und Konten
+bleiben unverändert.
+
 ## 03.10.2026
 api4webtrees 1.13.0 für die Apps: wtWin, wtTux und wtMac bekommen eine Ortsverwaltung (Orte mit Karte, GOV-Kennung,
 Koordinaten, Umbenennen und Zusammenführen) und können die Startperson festlegen. Für diese Funktionen (ab 1.34) bitte
