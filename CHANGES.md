@@ -3,6 +3,12 @@
 Der oberste Abschnitt erscheint im Paket-Zentrum unter „Was ist neu“ und im Release auf GitHub. Leser sind
 Synology-Nutzer: schreiben, was sich auf ihrer NAS ändert (oder „keine Änderung für die Synology“).
 
+## 11.10.2026
+api4webtrees 1.18.2 für die Apps (vorher 1.13.0): Forschungsaufgaben, Merkliste in den webtrees-Favoriten, Personen
+zusammenführen mit Rückgängig, Häuser und Höfe, Ortsart mit GOV-Typnummer und Spitznamen in Anführungszeichen. Für die
+aktuellen Fassungen von wtWin, wtTux, wtMac und wtAnd (1.49) bitte dieses Update einspielen. Stammbaum und Konten bleiben
+wie immer erhalten.
+
 ## 05.10.2026
 Fehlerbehebung: Fehlte in der Datenbank der interne Standard-Benutzer, zeigte „Meine Seiten“ nach der Anmeldung den
 Fehler „FOREIGN KEY constraint failed“. Das Paket legt ihn beim Start jetzt selbst wieder an. Stammbaum und Konten
