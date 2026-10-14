@@ -3,6 +3,12 @@
 Der oberste Abschnitt erscheint im Paket-Zentrum unter „Was ist neu“ und im Release auf GitHub. Leser sind
 Synology-Nutzer: schreiben, was sich auf ihrer NAS ändert (oder „keine Änderung für die Synology“).
 
+## 14.10.2026
+api4webtrees 1.21.0 für die Apps (vorher 1.18.2): Höfe und Häuser mit Verweisen für andere Programme, Adressen an
+Ereignissen, das GEDCOM-L-Addendum vollständig (Familienstand, Hauptbild, Forschungsaufgaben, Angaben am Ortsdatensatz)
+und Bücher, die nur zeigen, was Besucher sehen dürfen. Für wtWin, wtTux und wtMac 1.53 bitte dieses Update einspielen.
+Stammbaum und Konten bleiben wie immer erhalten.
+
 ## 11.10.2026
 api4webtrees 1.18.2 für die Apps (vorher 1.13.0): Forschungsaufgaben, Merkliste in den webtrees-Favoriten, Personen
 zusammenführen mit Rückgängig, Häuser und Höfe, Ortsart mit GOV-Typnummer und Spitznamen in Anführungszeichen. Für die
